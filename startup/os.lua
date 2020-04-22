@@ -101,7 +101,7 @@ local function flip()
     flapis.text.fadeOut("Setting up...", 2, middle, 0.15)
     flapis.text.fadeIn("What is your computer name? ", 2, middle, 0.15)
     local clabel = read()
-    flapis.text.fadeOut("What is your computer name? " .. uname, 2, middle, 0.15)
+    flapis.text.fadeOut("What is your computer name? " .. clabel, 2, middle, 0.15)
     
     flapis.text.fadeIn("What is your name? ", 2, middle, 0.15)
     local uname = read()
