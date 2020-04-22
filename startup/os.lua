@@ -99,6 +99,10 @@ local function flip()
     flapis.text.fadeIn("Setting up...", 2, middle, 0.15)
     sleep(2)
     flapis.text.fadeOut("Setting up...", 2, middle, 0.15)
+    flapis.text.fadeIn("What is your computer name? ", 2, middle, 0.15)
+    local clabel = read()
+    flapis.text.fadeOut("What is your computer name? " .. uname, 2, middle, 0.15)
+    
     flapis.text.fadeIn("What is your name? ", 2, middle, 0.15)
     local uname = read()
     flapis.text.fadeOut("What is your name? " .. uname, 2, middle, 0.15)
@@ -147,7 +151,7 @@ local function flip()
     sleep(2.5)
     flapis.text.fadeOut("Let's take a quick tour.", 2, middle, 0.15)
 
-    flapis.text.fadeIn("Press your arrow keys (\24 and \25) to move around menus", 2, middle-3, 0.15)
+    flapis.text.fadeIn("Press your arrow keys (\24 and \25) to move around", 2, middle-3, 0.15)
     flapis.text.fadeIn("Press ENTER to proceed", 2, middle+3, 0.15)
 
     -- Get Input Start
@@ -193,7 +197,7 @@ local function flip()
       end
     -- Get Input End
 
-    flapis.text.fadeOut("Press your arrow keys (\24 and \25) to move around menus", 2, middle-3, 0.15)
+    flapis.text.fadeOut("Press your arrow keys (\24 and \25) to move around", 2, middle-3, 0.15)
     flapis.text.fadeOut("Press ENTER to proceed", 2, middle+3, 0.15)
 
     term.clear()
@@ -217,6 +221,8 @@ local function flip()
     }))
     configFile.flush()
     configFile.close()
+
+    os.setComputerLabel(clabel)
 
     os.reboot()
   else
