@@ -222,7 +222,7 @@ local function flip()
     configFile.flush()
     configFile.close()
 
-    os.setComputerLabel(clabel)
+    os.setComputerLabel(pclabel)
 
     os.reboot()
   else
