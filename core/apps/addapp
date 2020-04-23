@@ -92,7 +92,7 @@ elseif key == keys.two then
 
   appConf = textutils.unserialise(appFile)
 
-  table.insert(appConf, {name = appname, path = apppath, colors = {bgcolor, fgcolor}})
+  table.insert(appConf, {name = appname, path = apppath, colors = {fgcolor, bgcolor}})
 
   appFileW.write(textutils.serialise(appConf))
   appFileW.flush()
@@ -103,7 +103,7 @@ elseif key == keys.two then
   term.write("App link created successfully")
 
   term.setCursorPos(2, middle+1)
-  term.write("Press any key to exit")
+  term.write("Press any key to reboot")
 
   term.setCursorPos(2, middle)
   term.setBackgroundColor(bgcolor)
@@ -112,4 +112,5 @@ elseif key == keys.two then
   term.write(appname)
 
   os.pullEvent("key")
+  os.reboot()
 end

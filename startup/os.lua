@@ -323,16 +323,6 @@ local function flip()
         else
           shell.run(flconfig.menuOptions[flconfig.menuPosition].script)
         end
-        
-        if table.getn(textutils.unserialise(fs.open("core/apps.cfg", "r").readAll())) > 0 then
-          for _, program in pairs(textutils.unserialise(fs.open("core/apps.cfg", "r").readAll())) do
-            table.insert(flconfig.menuOptions, {text = program.name, script = program.path, colors = program.colors})
-          end
-        
-          for i = table.getn(textutils.unserialise(fs.open("core/apps.cfg", "r").readAll())), table.getn(flconfig.menuOptions) do
-            table.remove(flconfig.menuOptions, i)
-          end
-        end
       end
     -- Get Input End
 
