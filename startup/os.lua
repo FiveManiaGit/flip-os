@@ -269,7 +269,7 @@ local function flip()
   end
 
   for _, program in pairs(textutils.unserialise(fs.open("core/apps.cfg", "r").readAll())) do
-    table.insert(flconfig.menuOptions, {text = program.name, script = program.path, colors = program.colors})
+    table.insert(flconfig.menuOptions, {text = program.name, script = program.path, colors = {program.colors.fg, program.colors.bg}})
   end
 
   while true do
