@@ -92,7 +92,7 @@ elseif key == keys.two then
 
   appConf = textutils.unserialise(appFile)
 
-  table.insert(appConf, {name = appname, path = apppath, colors = {fgcolor, bgcolor}})
+  table.insert(appConf, {name = appname, path = apppath, colors = {fg = fgcolor, bg = bgcolor}})
 
   appFileW.write(textutils.serialise(appConf))
   appFileW.flush()
