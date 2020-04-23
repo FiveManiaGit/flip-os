@@ -1,0 +1,115 @@
+local w, h = term.getSize()
+local middle = math.floor(h/2)
+
+local appConf = {}
+
+if not fs.exists("core/apps.cfg") then
+  local configFile = fs.open("core/apps.cfg", "w");
+  configFile.write(textutils.serialise({}))
+  configFile.flush()
+  configFile.close()
+end
+
+term.setBackgroundColor(colors.white)
+term.setTextColor(colors.black)
+term.clear()
+
+term.setCursorPos(2, middle-1)
+term.write("Add new app")
+term.setCursorPos(2, middle)
+term.write("[1] Edit the apps file")
+term.setCursorPos(2, middle+1)
+term.write("[2] Add a new app")
+
+local _, key = os.pullEvent("key")
+
+if key == keys.one then
+  sleep(0.05)
+  shell.run("edit core/apps.cfg")
+elseif key == keys.two then
+  term.clear()
+  term.setCursorPos(2, 2)
+  term.write("Add custom app")
+
+  term.setCursorPos(2, h-1)
+  term.write("Type \"exit\" to cancel")
+
+  term.setTextColor(colors.lightGray)
+
+  term.setCursorPos(2, middle-2)
+  term.clearLine()
+  term.write("App name")
+
+  term.setCursorPos(2, middle-1)
+  term.clearLine()
+  term.write("App path")
+
+  term.setCursorPos(2, middle+1)
+  term.clearLine()
+  term.write("Foreground color (decimal)")
+
+  term.setCursorPos(2, middle+2)
+  term.clearLine()
+  term.write("Background color (decimal)")
+
+  os.pullEvent("key")
+  term.setTextColor(colors.black)
+
+  term.setCursorPos(2, middle-2)
+  term.clearLine()
+  local appname = read()
+
+  if appname == "exit" then
+    os.queueEvent("terminate")
+  end
+
+  term.setCursorPos(2, middle-1)
+  term.clearLine()
+  local apppath = read()
+
+  if apppath == "exit" then
+    os.queueEvent("terminate")
+  end
+
+  term.setCursorPos(2, middle+1)
+  term.clearLine()
+  local bgcolor = tonumber(read())
+
+  if bgcolor == "exit" then
+    os.queueEvent("terminate")
+  end
+
+  term.setCursorPos(2, middle+2)
+  term.clearLine()
+  local fgcolor = tonumber(read())
+
+  if fgcolor == "exit" then
+    os.queueEvent("terminate")
+  end
+
+  local appFile = fs.open("core/apps.cfg", "r").readAll()
+  local appFileW = fs.open("core/apps.cfg", "w")
+
+  appConf = textutils.unserialise(appFile)
+
+  table.insert(appConf, {name = appname, path = apppath, colors = {bgcolor, fgcolor}})
+
+  appFileW.write(textutils.serialise(appConf))
+  appFileW.flush()
+  appFileW.close()
+
+  term.clear()
+  term.setCursorPos(2, middle-1)
+  term.write("App link created successfully")
+
+  term.setCursorPos(2, middle+1)
+  term.write("Press any key to exit")
+
+  term.setCursorPos(2, middle)
+  term.setBackgroundColor(bgcolor)
+  term.setTextColor(fgcolor)
+  term.clearLine()
+  term.write(appname)
+
+  os.pullEvent("key")
+end

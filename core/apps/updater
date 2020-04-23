@@ -1,0 +1,102 @@
+local w, h = term.getSize()
+local middle = math.floor(h/2)
+
+term.setBackgroundColor(colors.white)
+term.setTextColor(colors.black)
+term.clear()
+
+term.setCursorPos(2, middle-2)
+term.write("Update FlipOS?")
+term.setCursorPos(2, middle-1)
+term.write("Note that this will overwrite all contents on system folders!")
+term.setCursorPos(2, middle+1)
+term.write("[1] Yes")
+term.setCursorPos(2, middle+2)
+term.write("[2] No")
+
+local _, key = os.pullEvent("key")
+
+if key == keys.one then
+  local function update()
+    local w, h = term.getSize()
+    local middle = math.floor(h/2)
+  
+    local rawRepo = "https://raw.githubusercontent.com/FiveManiaGit/flip-os/master/"
+    local githubFiles = {}
+  
+    term.setBackgroundColor(colors.white)
+    term.setTextColor(colors.black)
+    term.clear()
+    term.setCursorPos(2, 2)
+    term.write("FlipOS Installer")
+    term.setTextColor(colors.gray)
+    term.write(" by FiveMania ")
+    term.setCursorPos(2, h-1)
+    term.write("Please, do not terminate the updater")
+  
+      term.setCursorPos(1, 1)
+      term.clear()
+      term.write("Getting repo data...")
+      githubFiles = textutils.unserialise(http.get("https://pastebin.com/raw/tFm8NTgU").readAll())
+
+      for _, file in ipairs(githubFiles) do
+        print("Removing: " .. file .. "...")
+        if fs.exists(file) then
+          fs.delete(file)
+        end
+        print("Removed: " .. file .. "...")
+      end
+
+      for _, file in ipairs(githubFiles) do
+        print("Downloading: " .. (rawRepo .. file) .. "...")
+        fs.open(file, "w").write(http.get(rawRepo .. file).readAll())
+        print("Written: " .. file)
+      end
+      
+      term.clear()
+      term.setCursorPos(2, middle)
+      term.setBackgroundColor(colors.green)
+      term.setTextColor(colors.white)
+      term.clearLine()
+      term.write("FlipOS installed successfully!")
+      sleep(2)
+      term.setCursorPos(2, middle)
+      term.setBackgroundColor(colors.blue)
+      term.setTextColor(colors.white)
+      term.clearLine()
+      term.write("Press any key to reboot")
+
+      os.pullEvent("key")
+      os.reboot()
+  end
+  
+  local status, err = pcall(update)
+  
+  if status then
+  else
+    term.setBackgroundColor(colors.blue)
+      term.setTextColor(colors.white)
+      term.clear()
+  
+      term.setCursorPos(2, 2)
+      term.write("Oops! An error ocurred while updating FlipOS")
+      term.setCursorPos(2, 3)
+      term.write("This could be caused by an error on our servers.")
+  
+      term.setCursorPos(2, 5)
+      term.write("Try updating again, if this problem persists,")
+      term.setCursorPos(2, 6)
+      term.write("please contact FiveMania.")
+  
+      term.setCursorPos(2, 8)
+      term.write("Click to reboot.")
+  
+      term.setCursorPos(2, 10)
+      term.write("Lua Error Code: " .. err)
+  
+      os.pullEvent("mouse_click")   
+      os.reboot()
+  end
+elseif key == keys.two then
+
+end

@@ -37,6 +37,9 @@ local function flip()
   local flconfig = {
     menuPosition = 1,
     menuOptions = {
+      -- Add custom app
+      {text = "Add custom app", script = "core/apps/addapp", luaCode = false, colors = {colors.white, colors.gray}},
+
       -- Apps
       {text = "LuaIDE", script = "core/apps/luaide", luaCode = false, colors = {colors.white, colors.purple}},
       {text = "NPaintPro", script = "core/apps/npaintpro", luaCode = false, colors = {colors.white, colors.blue}},
@@ -85,6 +88,13 @@ local function flip()
       passedIntro = false,
       customPath = {}
     }))
+    configFile.flush()
+    configFile.close()
+  end
+
+  if not fs.exists("core/apps.cfg") then
+    local configFile = fs.open("core/apps.cfg", "w");
+    configFile.write(textutils.serialise({}))
     configFile.flush()
     configFile.close()
   end
@@ -247,7 +257,7 @@ local function flip()
   term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
   term.write(flconfig.userconfigs.username)
   term.setCursorPos(2, h-1)
-  term.write("Version 1.0")
+  term.write("Version 1.1")
 
   for _, program in pairs(flconfig.userconfigs.customPath) do
     table.insert(path, program)
@@ -255,6 +265,10 @@ local function flip()
 
   for _, program in pairs(path) do
     shell.setAlias(program[1], program[2])
+  end
+
+  for _, program in pairs(textutils.unserialise(fs.open("core/apps.cfg", "r").readAll())) do
+    table.insert(flconfig.menuOptions, {text = program.name, script = program.path, colors = program.colors})
   end
 
   while true do
@@ -302,11 +316,21 @@ local function flip()
         if flconfig.menuPosition > table.getn(flconfig.menuOptions) then
           flconfig.menuPosition = 1
         end
-      elseif key == keys.enter then        
+      elseif key == keys.enter then
         if flconfig.menuOptions[flconfig.menuPosition].luaCode then
           load(flconfig.menuOptions[flconfig.menuPosition].script)()
         else
           shell.run(flconfig.menuOptions[flconfig.menuPosition].script)
+        end
+        
+        if table.getn(textutils.unserialise(fs.open("core/apps.cfg", "r").readAll())) > 0 then
+          for _, program in pairs(textutils.unserialise(fs.open("core/apps.cfg", "r").readAll())) do
+            table.insert(flconfig.menuOptions, {text = program.name, script = program.path, colors = program.colors})
+          end
+        
+          for i = table.getn(textutils.unserialise(fs.open("core/apps.cfg", "r").readAll())), table.getn(flconfig.menuOptions) do
+            table.remove(flconfig.menuOptions, i)
+          end
         end
       end
     -- Get Input End
@@ -322,7 +346,7 @@ local function flip()
       term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
       term.write(flconfig.userconfigs.username)
       term.setCursorPos(2, h-1)
-      term.write("Version 1.0")
+      term.write("Version 1.1")
     -- Refresh Menu End
   end
 end
