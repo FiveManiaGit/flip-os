@@ -4,7 +4,7 @@ local middle = math.floor(h/2)
 local setsCfg = {}
 
 if not fs.exists("core/settings.cfg") or type(textutils.unserialise(fs.open("core/settings.cfg", "r").readAll())) ~= "table" then
-  local configFile = fs.open("core/settings.cfg", "w");
+  local configFile = fs.open("core/settings.cfg", "w")
   configFile.write(textutils.serialise({
     bg = colors.white,
     fg = colors.black,
@@ -17,13 +17,18 @@ if not fs.exists("core/settings.cfg") or type(textutils.unserialise(fs.open("cor
   configFile.close()
 end
 
-local configFile = fs.open("core/settings.cfg", "r").readAll();
-local configFileW = fs.open("core/settings.cfg", "w");
+local configFile = fs.open("core/settings.cfg", "r").readAll()
+local configFileW = fs.open("core/settings.cfg", "w")
+local backupFileW = fs.open("core/settings.cfg.bak", "w")
+
+backupFileW.write(configFile)
+backupFileW.flush()
+backupFileW.close()
 
 setsCfg = textutils.unserialise(configFile)
 
-term.setBackgroundColor(colors.white)
-term.setTextColor(colors.black)
+term.setBackgroundColor(setsCfg.bg)
+term.setTextColor(setsCfg.fg)
 term.clear()
 
 term.setCursorPos(2, middle-1)
@@ -193,17 +198,18 @@ if key == keys.one then
     term.setCursorPos(2, middle)
     local newUName = read()
 
-    if string.len(newUName) > 16 then
+    if string.len(newUName) > 16 or string.len(newUName) <= 0 then
       term.setBackgroundColor(colors.red)
       term.setTextColor(colors.white)
       term.clear()
       term.setCursorPos(2, middle)
-      term.write("Username too big! (press any key to exit)")
+      term.write("Invalid username! (press any key to exit)")
       os.pullEvent("key")
       os.queueEvent("terminate")
+    else
+      setsCfg.username = newUName
     end
-
-    setsCfg.username = newUName
+    
     configFileW.write(textutils.serialise(setsCfg))
     configFileW.flush()
 
@@ -266,4 +272,6 @@ elseif key == keys.two then
   end
 end
 
+configFileW.write(textutils.serialise(setsCfg))
+configFileW.flush()
 sleep(0.05)

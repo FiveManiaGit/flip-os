@@ -10,8 +10,12 @@ if not fs.exists("core/apps.cfg") or type(textutils.unserialise(fs.open("core/ap
   configFile.close()
 end
 
-term.setBackgroundColor(colors.white)
-term.setTextColor(colors.black)
+local configFile = fs.open("core/settings.cfg", "r").readAll();
+
+setsCfg = textutils.unserialise(configFile)
+
+term.setBackgroundColor(setsCfg.bg)
+term.setTextColor(setsCfg.fg)
 term.clear()
 
 term.setCursorPos(2, middle-1)

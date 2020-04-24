@@ -36,6 +36,8 @@ local function flip()
     }
   }
 
+  term.setCursorBlink(false)
+
   local flconfig = {
     menuPosition = 1,
     menuOptions = {
@@ -43,24 +45,27 @@ local function flip()
       {text = "Add custom app", script = "core/apps/addapp", luaCode = false, colors = {colors.white, colors.gray}},
 
       -- Apps
-      {text = "LuaIDE", script = "core/apps/luaide", luaCode = false, colors = {colors.white, colors.purple}},
-      {text = "NPaintPro", script = "core/apps/npaintpro", luaCode = false, colors = {colors.white, colors.blue}},
-      {text = "Sketch", script = "core/apps/sketch", luaCode = false, colors = {colors.black, colors.lightBlue}},
-      {text = "STD-GUI", script = "core/apps/stdgui", luaCode = false, colors = {colors.orange, colors.gray}},
-      {text = "Shell", script = "fg", luaCode = false, colors = {colors.yellow, colors.black}},
-      {text = "Lua", script = "fg lua", luaCode = false, colors = {colors.blue, colors.lightBlue}},
+      {text = "LuaIDE", script = "core/apps/luaide", useBlit = false, luaCode = false, colors = {colors.white, colors.purple}},
+      {text = "NPaintPro", script = "core/apps/npaintpro", useBlit = false, luaCode = false, colors = {colors.white, colors.blue}},
+      {text = "Sketch", script = "core/apps/sketch", useBlit = false, luaCode = false, colors = {colors.black, colors.lightBlue}},
+      {text = "STD-GUI", script = "core/apps/stdgui", useBlit = false, luaCode = false, colors = {colors.orange, colors.gray}},
+      {text = "Enchat 3", script = "core/apps/enchat3", useBlit = true, blit = "e145db7a", blitBg = "ffffffff", luaCode = false, colors = {colors.lightBlue, colors.black}},
+      {text = "Shell", script = "fg", useBlit = false, luaCode = false, colors = {colors.yellow, colors.black}},
+      {text = "Lua", script = "fg lua", useBlit = false, luaCode = false, colors = {colors.blue, colors.lightBlue}},
+      {text = "Clock", script = "core/apps/clock", useBlit = false, luaCode = false, colors = {colors.lightGray, colors.gray}},
 
       -- Games
-      {text = "Redirection", script = "rom/programs/fun/advanced/redirection.lua", luaCode = false, colors = {colors.lightBlue, colors.gray}},
-      {text = "Strafe", script = "core/apps/strafe", luaCode = false, colors = {colors.white, colors.black}},
+      {text = "Redirection", script = "rom/programs/fun/advanced/redirection.lua", useBlit = false, luaCode = false, colors = {colors.lightBlue, colors.gray}},
+      {text = "Strafe", script = "core/apps/strafe", useBlit = false, luaCode = false, colors = {colors.white, colors.black}},
 
       -- System options
-      {text = "Shutdown", script = "os.shutdown()", luaCode = true, colors = {colors.white, colors.red}},
-      {text = "Reboot", script = "os.reboot()", luaCode = true, colors = {colors.black, colors.orange}},
-      {text = "Settings", script = "core/apps/settings", luaCode = false, colors = {colors.black, colors.lightGray}},
-      {text = "Update", script = "core/apps/updater", luaCode = false, colors = {colors.white, colors.lime}},
-      {text = "Changelog", script = "core/apps/changelog", luaCode = false, colors = {colors.black, colors.pink}},
-      {text = "Exit to CraftOS", script = "os.queueEvent('terminate')", luaCode = true, colors = {colors.black, colors.yellow}}
+      {text = "Shutdown", script = "os.shutdown()", useBlit = false, luaCode = true, colors = {colors.white, colors.red}},
+      {text = "Reboot", script = "os.reboot()", useBlit = false, luaCode = true, colors = {colors.black, colors.orange}},
+      {text = "Settings", script = "core/apps/settings", useBlit = false, luaCode = false, colors = {colors.black, colors.lightGray}},
+      {text = "Themes", script = "core/apps/themes", useBlit = false, luaCode = false, colors = {colors.white, colors.magenta}},
+      {text = "Update", script = "core/apps/updater", useBlit = false, luaCode = false, colors = {colors.white, colors.lime}},
+      {text = "Changelog", script = "core/apps/changelog", useBlit = false, luaCode = false, colors = {colors.black, colors.pink}},
+      {text = "Exit to CraftOS", script = "os.queueEvent('terminate')", useBlit = false, luaCode = true, colors = {colors.black, colors.yellow}}
     },
     tourMenuOptions = {
       {text = "Option 1", colors = {colors.white, colors.red}},
@@ -82,6 +87,20 @@ local function flip()
       customPath = {}
     }
   }
+
+  if fs.exists("core/settings.cfg.bak") then
+    if not fs.exists("core/settings.cfg") or type(textutils.unserialise(fs.open("core/settings.cfg", "r").readAll())) ~= "table" then
+      local cfgFile = fs.open("core/settings.cfg", "w")
+      cfgFile.write(fs.open("core/settings.cfg.bak", "r").readAll())      
+      term.setCursorPos(2, middle)
+      term.setBackgroundColor(colors.green)
+      term.setTextColor(colors.white)
+      term.clear()
+      term.write("Backup settings restored!")
+      sleep(2)
+    end
+    fs.delete("core/settings.cfg.bak")
+  end
 
   if not fs.exists("core/settings.cfg") or type(textutils.unserialise(fs.open("core/settings.cfg", "r").readAll())) ~= "table" then
     local configFile = fs.open("core/settings.cfg", "w")
@@ -105,6 +124,7 @@ local function flip()
   end
 
   local configFile = fs.open("core/settings.cfg", "r").readAll()
+  flconfig.userconfigs = textutils.unserialise(configFile)
 
   if not textutils.unserialise(configFile).passedIntro then
     term.setBackgroundColor(flconfig.userconfigs.bg)
@@ -280,12 +300,16 @@ local function flip()
     term.setTextColor(flconfig.userconfigs.fg)
     term.clear()
 
+    for i = -1, 1 do
+      term.setBackgroundColor(colors.white)
+      term.setCursorPos(2, middle+i)
+      term.clearLine()
+    end
+
     flapis.text.fadeIn("FlipOS", 2, middle, 0.15)
     sleep(2)
     flapis.text.fadeOut("FlipOS", 2, middle, 0.15)
   end
-
-  flconfig.userconfigs = textutils.unserialise(configFile)
   
   if fs.exists('autoexec.lua') then
     dofile('autoexec.lua')
@@ -301,7 +325,7 @@ local function flip()
   term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
   term.write(flconfig.userconfigs.username)
   term.setCursorPos(2, h-1)
-  term.write("Version 1.2.2")
+  term.write("Version 1.2.3")
 
   for _, program in pairs(flconfig.userconfigs.customPath) do
     table.insert(path, program)
@@ -336,10 +360,19 @@ local function flip()
   while true do
     -- Draw Menu Start
       term.setCursorPos(2, middle)
-      term.setTextColor(flconfig.menuOptions[flconfig.menuPosition].colors[1])
-      term.setBackgroundColor(flconfig.menuOptions[flconfig.menuPosition].colors[2])
-      term.clearLine()
-      term.write(flconfig.menuOptions[flconfig.menuPosition].text)
+      
+      if not flconfig.menuOptions[flconfig.menuPosition].useBlit then
+        term.setTextColor(flconfig.menuOptions[flconfig.menuPosition].colors[1])
+        term.setBackgroundColor(flconfig.menuOptions[flconfig.menuPosition].colors[2])
+        term.clearLine()
+        term.write(flconfig.menuOptions[flconfig.menuPosition].text)
+      else
+        term.setTextColor(colors.white)
+        term.setBackgroundColor(flconfig.menuOptions[flconfig.menuPosition].colors[2])
+        term.clearLine()
+        term.blit(flconfig.menuOptions[flconfig.menuPosition].text, flconfig.menuOptions[flconfig.menuPosition].blit, flconfig.menuOptions[flconfig.menuPosition].blitBg)
+      end
+
       term.setTextColor(flconfig.userconfigs.pfg)
       term.setBackgroundColor(flconfig.userconfigs.bg)
 
@@ -398,12 +431,23 @@ local function flip()
       term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
       term.write(flconfig.userconfigs.username)
       term.setCursorPos(2, h-1)
-      term.write("Version 1.2.2")
+      term.write("Version 1.2.3")
     -- Refresh Menu End
   end
 end
 
-local status, err = pcall(flip)
+local function bios()
+  if not term.isColor() then
+    print("FlipOS does not work on Basic Computers, please upgrade to an Advanced Computer.")
+    print("Press any key to close")
+    os.pullEvent("key")
+    os.queueEvent("terminate")
+  else
+    flip()
+  end
+end
+
+local status, err = pcall(bios)
 
 if status then
 else

@@ -1,0 +1,31 @@
+local w, h = term.getSize()
+local middle = math.floor(h/2)
+
+local configFile = fs.open("core/settings.cfg", "r").readAll();
+
+setsCfg = textutils.unserialise(configFile)
+
+term.setBackgroundColor(setsCfg.bg)
+term.setTextColor(setsCfg.fg)
+term.clear()
+
+parallel.waitForAny(function()
+  while true do
+    term.setCursorPos(2, middle-1)
+    term.write("Clock")
+    term.setCursorPos(2, middle+1)
+    term.write("Press Q to close")
+    term.setCursorPos(2, middle)
+    term.clearLine()
+    term.write("Day " .. os.day() .. ", ".. textutils.formatTime(os.time()))
+    sleep(1)
+  end
+end, function()
+  while true do
+    local _, key = os.pullEvent("key")
+    if key == keys.q then
+      sleep(0.05)
+      break
+    end
+  end
+end)

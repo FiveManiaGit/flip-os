@@ -1,16 +1,31 @@
 local w, h = term.getSize()
 local middle = math.floor(h/2)
 
-term.setBackgroundColor(colors.white)
-term.setTextColor(colors.black)
+local configFile = fs.open("core/settings.cfg", "r").readAll();
+
+setsCfg = textutils.unserialise(configFile)
+
+term.setBackgroundColor(setsCfg.bg)
+term.setTextColor(setsCfg.fg)
 term.clear()
 
+for i = 1, 3 do
+  term.setCursorPos(1, i)
+  term.setBackgroundColor(colors.lime)
+  term.clearLine()
+end
+
+term.setTextColor(colors.black)
 term.setCursorPos(2, 2)
 term.write("FlipOS Changelog")
 term.setCursorPos(2, 4)
-term.setBackgroundColor(colors.black)
+
+term.setBackgroundColor(colors.lightGray)
 term.clearLine()
-term.setBackgroundColor(colors.white)
+
+term.setBackgroundColor(setsCfg.bg)
+term.setTextColor(setsCfg.fg)
+
 term.setCursorPos(1, 6)
 local res = http.get("https://pastebin.com/raw/FyuUj8nU").readAll()
 if res ~= nil then

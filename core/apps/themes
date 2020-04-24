@@ -1,0 +1,112 @@
+local w, h = term.getSize()
+local middle = math.floor(h/2)
+
+local setsCfg = {}
+
+if not fs.exists("core/settings.cfg") or type(textutils.unserialise(fs.open("core/settings.cfg", "r").readAll())) ~= "table" then
+  local configFile = fs.open("core/settings.cfg", "w");
+  configFile.write(textutils.serialise({
+    bg = colors.white,
+    fg = colors.black,
+    pfg = colors.gray,
+    username = "FlipOS Guest",
+    passedIntro = false,
+    customPath = {}
+  }))
+  configFile.flush()
+  configFile.close()
+end
+
+local configFile = fs.open("core/settings.cfg", "r").readAll();
+local configFileW = fs.open("core/settings.cfg", "w");
+
+setsCfg = textutils.unserialise(configFile)
+
+term.setBackgroundColor(setsCfg.bg)
+term.setTextColor(setsCfg.fg)
+term.clear()
+
+term.setCursorPos(2, middle-2)
+term.write("Select a new theme")
+term.setCursorPos(2, middle)
+term.write("[1] Light")
+term.setCursorPos(2, middle+1)
+term.write("[2] Dark")
+term.setCursorPos(2, middle+2)
+term.write("[3] Darker")
+
+local _, key = os.pullEvent("key")
+
+if key == keys.one then
+  setsCfg.bg = colors.white
+  setsCfg.fg = colors.black
+  setsCfg.pfg = colors.gray
+
+  configFileW.write(textutils.serialise(setsCfg))
+  configFileW.flush()
+  configFileW.close()
+
+  term.clear()
+  term.setCursorPos(2, middle-1)
+  term.write("Reboot to apply changes?")
+  term.setCursorPos(2, middle)
+  term.write("[1] Yes")
+  term.setCursorPos(2, middle+1)
+  term.write("[2] No")
+
+  local _, optkey = os.pullEvent("key")
+
+  if optkey == keys.one then
+    os.reboot()
+  end
+elseif key == keys.two then
+  setsCfg.bg = colors.gray
+  setsCfg.fg = colors.white
+  setsCfg.pfg = colors.lightGray
+
+  configFileW.write(textutils.serialise(setsCfg))
+  configFileW.flush()
+  configFileW.close()
+
+  term.clear()
+  term.setCursorPos(2, middle-1)
+  term.write("Reboot to apply changes?")
+  term.setCursorPos(2, middle)
+  term.write("[1] Yes")
+  term.setCursorPos(2, middle+1)
+  term.write("[2] No")
+
+  local _, optkey = os.pullEvent("key")
+
+  if optkey == keys.one then
+    os.reboot()
+  end
+elseif key == keys.three then
+  setsCfg.bg = colors.black
+  setsCfg.fg = colors.white
+  setsCfg.pfg = colors.lightGray
+
+  configFileW.write(textutils.serialise(setsCfg))
+  configFileW.flush()
+  configFileW.close()
+
+  term.clear()
+  term.setCursorPos(2, middle-1)
+  term.write("Reboot to apply changes?")
+  term.setCursorPos(2, middle)
+  term.write("[1] Yes")
+  term.setCursorPos(2, middle+1)
+  term.write("[2] No")
+
+  local _, optkey = os.pullEvent("key")
+
+  if optkey == keys.one then
+    os.reboot()
+  end
+end
+
+configFileW.write(textutils.serialise(setsCfg))
+configFileW.flush()
+configFileW.close()
+
+sleep(0.05)
