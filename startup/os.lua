@@ -266,7 +266,7 @@ local function flip()
   term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
   term.write(flconfig.userconfigs.username)
   term.setCursorPos(2, h-1)
-  term.write("Version 1.2.0")
+  term.write("Version 1.2.1")
 
   for _, program in pairs(flconfig.userconfigs.customPath) do
     table.insert(path, program)
@@ -363,7 +363,7 @@ local function flip()
       term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
       term.write(flconfig.userconfigs.username)
       term.setCursorPos(2, h-1)
-      term.write("Version 1.2.0")
+      term.write("Version 1.2.1")
     -- Refresh Menu End
   end
 end
