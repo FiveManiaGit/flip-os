@@ -59,6 +59,7 @@ local function flip()
       {text = "Reboot", script = "os.reboot()", luaCode = true, colors = {colors.black, colors.orange}},
       {text = "Settings", script = "core/apps/settings", luaCode = false, colors = {colors.black, colors.lightGray}},
       {text = "Update", script = "core/apps/updater", luaCode = false, colors = {colors.white, colors.lime}},
+      {text = "Changelog", script = "core/apps/changelog", luaCode = false, colors = {colors.black, colors.pink}},
       {text = "Exit to CraftOS", script = "os.queueEvent('terminate')", luaCode = true, colors = {colors.black, colors.yellow}}
     },
     tourMenuOptions = {

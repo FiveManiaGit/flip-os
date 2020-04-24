@@ -80,6 +80,8 @@ if key == keys.one then
     end
 
     setsCfg.bg = newColor
+    configFileW.write(textutils.serialise(setsCfg))
+    configFileW.flush()
 
     term.clear()
     term.setCursorPos(2, middle-1)
@@ -121,6 +123,8 @@ if key == keys.one then
     end
 
     setsCfg.fg = newColor
+    configFileW.write(textutils.serialise(setsCfg))
+    configFileW.flush()
 
     term.clear()
     term.setCursorPos(2, middle-1)
@@ -162,6 +166,8 @@ if key == keys.one then
     end
 
     setsCfg.pfg = newColor
+    configFileW.write(textutils.serialise(setsCfg))
+    configFileW.flush()
 
     term.clear()
     term.setCursorPos(2, middle-1)
@@ -198,6 +204,8 @@ if key == keys.one then
     end
 
     setsCfg.username = newUName
+    configFileW.write(textutils.serialise(setsCfg))
+    configFileW.flush()
 
     term.clear()
     term.setCursorPos(2, middle-1)
@@ -259,6 +267,3 @@ elseif key == keys.two then
 end
 
 sleep(0.05)
-configFileW.write(textutils.serialise(setsCfg))
-configFileW.flush()
-configFileW.close()

@@ -1,0 +1,21 @@
+local w, h = term.getSize()
+local middle = math.floor(h/2)
+
+term.setBackgroundColor(colors.white)
+term.setTextColor(colors.black)
+term.clear()
+
+term.setCursorPos(2, 2)
+term.write("FlipOS Changelog")
+term.setCursorPos(2, 4)
+term.setBackgroundColor(colors.black)
+term.clearLine()
+term.setBackgroundColor(colors.white)
+term.setCursorPos(1, 6)
+local res = http.get("https://pastebin.com/raw/FyuUj8nU").readAll()
+if res ~= nil then
+  print(res)
+else
+  print("Internet connection required.")
+end
+os.pullEvent("key")
