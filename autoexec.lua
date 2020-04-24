@@ -1,3 +1,5 @@
+-- This is not included on v1.2.1 and above
+
 local w, h = term.getSize()
 local middle = math.floor(h/2)
 
