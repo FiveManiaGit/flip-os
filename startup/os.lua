@@ -124,96 +124,131 @@ local function flip()
     flapis.text.fadeIn("Hello, " .. uname .. "!", 2, middle, 0.15)
     sleep(2.5)
     flapis.text.fadeOut("Hello, " .. uname .. "!", 2, middle, 0.15)
-    flapis.text.fadeIn("Welcome to FlipOS!", 2, middle, 0.15)
-    sleep(2)
-    flapis.text.fadeOut("Welcome to FlipOS!", 2, middle, 0.15)
-    flapis.text.fadeIn("FlipOS is an operating system made in Lua", 2, middle, 0.15)
-    sleep(2)
-    flapis.text.fadeOut("FlipOS is an operating system made in Lua", 2, middle, 0.15)
-    flapis.text.fadeIn("It has been created to provide...", 2, middle, 0.15)
-    sleep(2)
-    flapis.text.fadeOut("It has been created to provide...", 2, middle, 0.15)
+    flapis.text.fadeIn("Before we get started, you can skip this", 2, middle-1, 0.15)
+    flapis.text.fadeIn("tutorial by pressing the Home key", 2, middle, 0.15)
+    flapis.text.fadeIn("at any moment of this tutorial.", 2, middle+1, 0.15)
+    sleep(3.5)
+    flapis.text.fadeOut("Before we get started, you can skip this", 2, middle-1, 0.15)
+    flapis.text.fadeOut("tutorial by pressing the Home key", 2, middle, 0.15)
+    flapis.text.fadeOut("at any moment of this tutorial.", 2, middle+1, 0.15)
+    
+    parallel.waitForAny(function()
+      flapis.text.fadeIn("Welcome to FlipOS!", 2, middle, 0.15)
+      sleep(2)
+      flapis.text.fadeOut("Welcome to FlipOS!", 2, middle, 0.15)
+      flapis.text.fadeIn("FlipOS is an operating system made in Lua", 2, middle, 0.15)
+      sleep(2)
+      flapis.text.fadeOut("FlipOS is an operating system made in Lua", 2, middle, 0.15)
+      flapis.text.fadeIn("It has been created to provide...", 2, middle, 0.15)
+      sleep(2)
+      flapis.text.fadeOut("It has been created to provide...", 2, middle, 0.15)
 
-    flapis.text.fadeIn("Simple use", 2, middle, 0.15)
-    sleep(1)
-    flapis.text.fadeOut("Simple use", 2, middle, 0.15)
+      flapis.text.fadeIn("Simple use", 2, middle, 0.15)
+      sleep(1)
+      flapis.text.fadeOut("Simple use", 2, middle, 0.15)
 
-    flapis.text.fadeIn("Minimalist interface", 2, middle, 0.15)
-    sleep(1)
-    flapis.text.fadeOut("Minimalist interface", 2, middle, 0.15)
+      flapis.text.fadeIn("Minimalist interface", 2, middle, 0.15)
+      sleep(1)
+      flapis.text.fadeOut("Minimalist interface", 2, middle, 0.15)
 
-    flapis.text.fadeIn("Amazing applications", 2, middle, 0.15)
-    sleep(1)
-    flapis.text.fadeOut("Amazing applications", 2, middle, 0.15)
+      flapis.text.fadeIn("Amazing applications", 2, middle, 0.15)
+      sleep(1)
+      flapis.text.fadeOut("Amazing applications", 2, middle, 0.15)
 
-    flapis.text.fadeIn("Good experiences", 2, middle, 0.15)
-    sleep(1)
-    flapis.text.fadeOut("Good experiences", 2, middle, 0.15)
+      flapis.text.fadeIn("Good experiences", 2, middle, 0.15)
+      sleep(1)
+      flapis.text.fadeOut("Good experiences", 2, middle, 0.15)
 
-    flapis.text.fadeIn("Education", 2, middle, 0.15)
-    sleep(1)
-    flapis.text.fadeOut("Education", 2, middle, 0.15)
+      flapis.text.fadeIn("Education", 2, middle, 0.15)
+      sleep(1)
+      flapis.text.fadeOut("Education", 2, middle, 0.15)
 
-    flapis.text.fadeIn("Work (specially for home office)", 2, middle, 0.15)
-    sleep(1)
-    flapis.text.fadeOut("Work (specially for home office)", 2, middle, 0.15)
+      flapis.text.fadeIn("Work (specially for home office)", 2, middle, 0.15)
+      sleep(1)
+      flapis.text.fadeOut("Work (specially for home office)", 2, middle, 0.15)
 
-    flapis.text.fadeIn("And fun.", 2, middle, 0.15)
-    sleep(1)
-    flapis.text.fadeOut("And fun.", 2, middle, 0.15)
+      flapis.text.fadeIn("And fun.", 2, middle, 0.15)
+      sleep(1)
+      flapis.text.fadeOut("And fun.", 2, middle, 0.15)
 
-    flapis.text.fadeIn("Let's take a quick tour.", 2, middle, 0.15)
-    sleep(2.5)
-    flapis.text.fadeOut("Let's take a quick tour.", 2, middle, 0.15)
+      flapis.text.fadeIn("Let's take a quick tour.", 2, middle, 0.15)
+      sleep(2.5)
+      flapis.text.fadeOut("Let's take a quick tour.", 2, middle, 0.15)
 
-    flapis.text.fadeIn("Press your arrow keys (\24 and \25) to move around", 2, middle-3, 0.15)
-    flapis.text.fadeIn("Press ENTER to proceed", 2, middle+3, 0.15)
+      flapis.text.fadeIn("Press your arrow keys (\24 and \25) to move around", 2, middle-3, 0.15)
+      flapis.text.fadeIn("Press ENTER to proceed", 2, middle+3, 0.15)
 
-    -- Get Input Start
-      while true do
-        term.setCursorPos(2, middle)
-        term.setTextColor(flconfig.tourMenuOptions[flconfig.menuPosition].colors[1])
-        term.setBackgroundColor(flconfig.tourMenuOptions[flconfig.menuPosition].colors[2])
-        term.clearLine()
-        term.write(flconfig.tourMenuOptions[flconfig.menuPosition].text)
-        term.setTextColor(flconfig.userconfigs.pfg)
-        term.setBackgroundColor(flconfig.userconfigs.bg)
+      -- Get Input Start
+        while true do
+          term.setCursorPos(2, middle)
+          term.setTextColor(flconfig.tourMenuOptions[flconfig.menuPosition].colors[1])
+          term.setBackgroundColor(flconfig.tourMenuOptions[flconfig.menuPosition].colors[2])
+          term.clearLine()
+          term.write(flconfig.tourMenuOptions[flconfig.menuPosition].text)
+          term.setTextColor(flconfig.userconfigs.pfg)
+          term.setBackgroundColor(flconfig.userconfigs.bg)
 
-        if flconfig.tourMenuOptions[flconfig.menuPosition-1] ~= nil then
-          term.setCursorPos(2, middle-1)
-          term.write(flconfig.tourMenuOptions[flconfig.menuPosition-1].text)
-        else
-          term.setCursorPos(2, middle-1)
-          term.write(flconfig.tourMenuOptions[table.getn(flconfig.tourMenuOptions)].text)
-        end
-
-        if flconfig.tourMenuOptions[flconfig.menuPosition+1] ~= nil then
-          term.setCursorPos(2, middle+1)
-          term.write(flconfig.tourMenuOptions[flconfig.menuPosition+1].text)
-        else
-          term.setCursorPos(2, middle+1)
-          term.write(flconfig.tourMenuOptions[1].text)
-        end
-
-        local _, key = os.pullEvent("key")
-        if key == keys.up then
-          flconfig.menuPosition = flconfig.menuPosition - 1
-          if flconfig.menuPosition <= 0 then
-            flconfig.menuPosition = table.getn(flconfig.tourMenuOptions)
+          if flconfig.tourMenuOptions[flconfig.menuPosition-1] ~= nil then
+            term.setCursorPos(2, middle-1)
+            term.write(flconfig.tourMenuOptions[flconfig.menuPosition-1].text)
+          else
+            term.setCursorPos(2, middle-1)
+            term.write(flconfig.tourMenuOptions[table.getn(flconfig.tourMenuOptions)].text)
           end
-        elseif key == keys.down then
-          flconfig.menuPosition = flconfig.menuPosition + 1
-          if flconfig.menuPosition > table.getn(flconfig.tourMenuOptions) then
-            flconfig.menuPosition = 1
+
+          if flconfig.tourMenuOptions[flconfig.menuPosition+1] ~= nil then
+            term.setCursorPos(2, middle+1)
+            term.write(flconfig.tourMenuOptions[flconfig.menuPosition+1].text)
+          else
+            term.setCursorPos(2, middle+1)
+            term.write(flconfig.tourMenuOptions[1].text)
           end
-        elseif key == keys.enter then
-          break
+
+          local _, key = os.pullEvent("key")
+          if key == keys.up then
+            flconfig.menuPosition = flconfig.menuPosition - 1
+            if flconfig.menuPosition <= 0 then
+              flconfig.menuPosition = table.getn(flconfig.tourMenuOptions)
+            end
+          elseif key == keys.down then
+            flconfig.menuPosition = flconfig.menuPosition + 1
+            if flconfig.menuPosition > table.getn(flconfig.tourMenuOptions) then
+              flconfig.menuPosition = 1
+            end
+          elseif key == keys.enter then
+            break
+          end
         end
+      -- Get Input End
+
+      flapis.text.fadeOut("Press your arrow keys (\24 and \25) to move around", 2, middle-3, 0.15)
+      flapis.text.fadeOut("Press ENTER to proceed", 2, middle+3, 0.15)
+    end, function()
+      local _, skipkey = os.pullEvent("key")
+
+      if skipkey == keys.home then
+        term.clear()
+        flapis.text.fadeIn("Tutorial skipped!", 2, middle, 0.05)
+        sleep(1)
+        flapis.text.fadeOut("Tutorial skipped!", 2, middle, 0.05)
+
+        local configFile = fs.open("core/settings.cfg", "w")
+        configFile.write(textutils.serialise({
+          bg = colors.white,
+          fg = colors.black,
+          pfg = colors.lightGray,
+          username = uname,
+          passedIntro = true,
+          customPath = {}
+        }))
+        configFile.flush()
+        configFile.close()
+
+        os.setComputerLabel(pclabel)
+
+        os.reboot()
       end
-    -- Get Input End
-
-    flapis.text.fadeOut("Press your arrow keys (\24 and \25) to move around", 2, middle-3, 0.15)
-    flapis.text.fadeOut("Press ENTER to proceed", 2, middle+3, 0.15)
+    end)
 
     term.clear()
 
