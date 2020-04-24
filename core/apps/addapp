@@ -3,7 +3,7 @@ local middle = math.floor(h/2)
 
 local appConf = {}
 
-if not fs.exists("core/apps.cfg") then
+if not fs.exists("core/apps.cfg") or type(textutils.unserialise(fs.open("core/apps.cfg", "r").readAll())) ~= "table" then
   local configFile = fs.open("core/apps.cfg", "w");
   configFile.write(textutils.serialise({}))
   configFile.flush()
@@ -26,6 +26,18 @@ local _, key = os.pullEvent("key")
 if key == keys.one then
   sleep(0.05)
   shell.run("edit core/apps.cfg")
+  term.setCursorPos(2, middle-1)
+  term.write("Reboot to apply changes?")
+  term.setCursorPos(2, middle)
+  term.write("[1] Yes")
+  term.setCursorPos(2, middle+1)
+  term.write("[2] No")
+
+  local _, optkey = os.pullEvent("key")
+
+  if optkey == keys.one then
+    os.reboot()
+  end
 elseif key == keys.two then
   term.clear()
   term.setCursorPos(2, 2)
@@ -46,13 +58,12 @@ elseif key == keys.two then
 
   term.setCursorPos(2, middle+1)
   term.clearLine()
-  term.write("Foreground color (decimal)")
+  term.write("Foreground color")
 
   term.setCursorPos(2, middle+2)
   term.clearLine()
-  term.write("Background color (decimal)")
+  term.write("Background color")
 
-  os.pullEvent("key")
   term.setTextColor(colors.black)
 
   term.setCursorPos(2, middle-2)
@@ -73,17 +84,17 @@ elseif key == keys.two then
 
   term.setCursorPos(2, middle+1)
   term.clearLine()
-  local bgcolor = tonumber(read())
+  local fgcolor = read()
 
-  if bgcolor == "exit" then
+  if fgcolor == "exit" then
     os.queueEvent("terminate")
   end
 
   term.setCursorPos(2, middle+2)
   term.clearLine()
-  local fgcolor = tonumber(read())
+  local bgcolor = read()
 
-  if fgcolor == "exit" then
+  if bgcolor == "exit" then
     os.queueEvent("terminate")
   end
 
@@ -91,6 +102,38 @@ elseif key == keys.two then
   local appFileW = fs.open("core/apps.cfg", "w")
 
   appConf = textutils.unserialise(appFile)
+
+  if tonumber(fgcolor) ~= nil then
+    fgcolor = tonumber(fgcolor)
+  else
+    if colors[fgcolor] ~= nil then
+      fgcolor = tonumber(colors[fgcolor])
+    else
+      term.setBackgroundColor(colors.red)
+      term.setTextColor(colors.white)
+      term.clear()
+      term.setCursorPos(2, middle)
+      term.write("Invalid color! (press any key to exit)")
+      os.pullEvent("key")
+      os.queueEvent("terminate")
+    end
+  end
+
+  if tonumber(bgcolor) ~= nil then
+    bgcolor = tonumber(bgcolor)
+  else
+    if colors[bgcolor] ~= nil then
+      bgcolor = tonumber(colors[bgcolor])
+    else
+      term.setBackgroundColor(colors.red)
+      term.setTextColor(colors.white)
+      term.clear()
+      term.setCursorPos(2, middle)
+      term.write("Invalid color! (press any key to exit)")
+      os.pullEvent("key")
+      os.queueEvent("terminate")
+    end
+  end
 
   table.insert(appConf, {name = appname, path = apppath, colors = {fg = fgcolor, bg = bgcolor}})
 

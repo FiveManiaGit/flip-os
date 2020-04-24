@@ -1,0 +1,264 @@
+local w, h = term.getSize()
+local middle = math.floor(h/2)
+
+local setsCfg = {}
+
+if not fs.exists("core/settings.cfg") or type(textutils.unserialise(fs.open("core/settings.cfg", "r").readAll())) ~= "table" then
+  local configFile = fs.open("core/settings.cfg", "w");
+  configFile.write(textutils.serialise({
+    bg = colors.white,
+    fg = colors.black,
+    pfg = colors.gray,
+    username = "FlipOS Guest",
+    passedIntro = false,
+    customPath = {}
+  }))
+  configFile.flush()
+  configFile.close()
+end
+
+local configFile = fs.open("core/settings.cfg", "r").readAll();
+local configFileW = fs.open("core/settings.cfg", "w");
+
+setsCfg = textutils.unserialise(configFile)
+
+term.setBackgroundColor(colors.white)
+term.setTextColor(colors.black)
+term.clear()
+
+term.setCursorPos(2, middle-1)
+term.write("Settings")
+term.setCursorPos(2, middle)
+term.write("[1] Edit the settings")
+term.setCursorPos(2, middle+1)
+term.write("[2] Reset all settings")
+
+local _, key = os.pullEvent("key")
+
+if key == keys.one then
+  sleep(0.05)  
+  term.clear()
+  term.setCursorPos(2, middle-3)
+  term.write("Choose a setting")
+  term.setCursorPos(2, middle-1)
+  term.write("[1] Background Color")
+  term.setCursorPos(2, middle)
+  term.write("[2] Foreground Color")
+  term.setCursorPos(2, middle+1)
+  term.write("[3] 2nd Foreground Color")
+  term.setCursorPos(2, middle+2)
+  term.write("[4] Username")
+  term.setCursorPos(2, middle+3)
+  term.write("[5] Edit the settings file")
+
+  local _, cfgkey = os.pullEvent("key")
+
+  if cfgkey == keys.one then
+    sleep(0.05)
+    local isColorValid = false
+    term.clear()
+    term.setCursorPos(2, middle-1)
+    term.write("Insert a color name or decimal:")
+    term.setCursorPos(2, middle+1)
+    term.write("Current color: " .. setsCfg.bg)
+    term.setCursorPos(2, middle)
+    local newColor = read()
+    if tonumber(newColor) ~= nil then
+      newColor = tonumber(newColor)
+    else
+      if colors[newColor] ~= nil then
+        newColor = tonumber(colors[newColor])
+      else
+        term.setBackgroundColor(colors.red)
+        term.setTextColor(colors.white)
+        term.clear()
+        term.setCursorPos(2, middle)
+        term.write("Invalid color! (press any key to exit)")
+        os.pullEvent("key")
+        os.queueEvent("terminate")
+      end
+    end
+
+    setsCfg.bg = newColor
+
+    term.clear()
+    term.setCursorPos(2, middle-1)
+    term.write("Reboot to apply changes?")
+    term.setCursorPos(2, middle)
+    term.write("[1] Yes")
+    term.setCursorPos(2, middle+1)
+    term.write("[2] No")
+
+    local _, optkey = os.pullEvent("key")
+
+    if optkey == keys.one then
+      os.reboot()
+    end
+  elseif cfgkey == keys.two then
+    sleep(0.05)
+    local isColorValid = false
+    term.clear()
+    term.setCursorPos(2, middle-1)
+    term.write("Insert a color name or decimal:")
+    term.setCursorPos(2, middle+1)
+    term.write("Current color: " .. setsCfg.fg)
+    term.setCursorPos(2, middle)
+    local newColor = read()
+    if tonumber(newColor) ~= nil then
+      newColor = tonumber(newColor)
+    else
+      if colors[newColor] ~= nil then
+        newColor = tonumber(colors[newColor])
+      else
+        term.setBackgroundColor(colors.red)
+        term.setTextColor(colors.white)
+        term.clear()
+        term.setCursorPos(2, middle)
+        term.write("Invalid color! (press any key to exit)")
+        os.pullEvent("key")
+        os.queueEvent("terminate")
+      end
+    end
+
+    setsCfg.fg = newColor
+
+    term.clear()
+    term.setCursorPos(2, middle-1)
+    term.write("Reboot to apply changes?")
+    term.setCursorPos(2, middle)
+    term.write("[1] Yes")
+    term.setCursorPos(2, middle+1)
+    term.write("[2] No")
+
+    local _, optkey = os.pullEvent("key")
+
+    if optkey == keys.one then
+      os.reboot()
+    end
+  elseif cfgkey == keys.three then
+    sleep(0.05)
+    local isColorValid = false
+    term.clear()
+    term.setCursorPos(2, middle-1)
+    term.write("Insert a color name or decimal:")
+    term.setCursorPos(2, middle+1)
+    term.write("Current color: " .. setsCfg.pfg)
+    term.setCursorPos(2, middle)
+    local newColor = read()
+    if tonumber(newColor) ~= nil then
+      newColor = tonumber(newColor)
+    else
+      if colors[newColor] ~= nil then
+        newColor = tonumber(colors[newColor])
+      else
+        term.setBackgroundColor(colors.red)
+        term.setTextColor(colors.white)
+        term.clear()
+        term.setCursorPos(2, middle)
+        term.write("Invalid color! (press any key to exit)")
+        os.pullEvent("key")
+        os.queueEvent("terminate")
+      end
+    end
+
+    setsCfg.pfg = newColor
+
+    term.clear()
+    term.setCursorPos(2, middle-1)
+    term.write("Reboot to apply changes?")
+    term.setCursorPos(2, middle)
+    term.write("[1] Yes")
+    term.setCursorPos(2, middle+1)
+    term.write("[2] No")
+
+    local _, optkey = os.pullEvent("key")
+
+    if optkey == keys.one then
+      os.reboot()
+    end
+  elseif cfgkey == keys.four then
+    sleep(0.05)
+    local isUsernameValid = false
+    term.clear()
+    term.setCursorPos(2, middle-1)
+    term.write("Insert a new username:")
+    term.setCursorPos(2, middle+1)
+    term.write("Current username: " .. setsCfg.username)
+    term.setCursorPos(2, middle)
+    local newUName = read()
+
+    if string.len(newUName) > 16 then
+      term.setBackgroundColor(colors.red)
+      term.setTextColor(colors.white)
+      term.clear()
+      term.setCursorPos(2, middle)
+      term.write("Username too big! (press any key to exit)")
+      os.pullEvent("key")
+      os.queueEvent("terminate")
+    end
+
+    setsCfg.username = newUName
+
+    term.clear()
+    term.setCursorPos(2, middle-1)
+    term.write("Reboot to apply changes?")
+    term.setCursorPos(2, middle)
+    term.write("[1] Yes")
+    term.setCursorPos(2, middle+1)
+    term.write("[2] No")
+
+    local _, optkey = os.pullEvent("key")
+
+    if optkey == keys.one then
+      os.reboot()
+    end
+  elseif cfgkey == keys.five then
+    sleep(0.05)
+    configFileW.write(textutils.serialise(setsCfg))
+    configFileW.flush()
+    shell.run("edit core/settings.cfg")
+    term.setCursorPos(2, middle-1)
+    term.write("Reboot to apply changes?")
+    term.setCursorPos(2, middle)
+    term.write("[1] Yes")
+    term.setCursorPos(2, middle+1)
+    term.write("[2] No")
+
+    local _, optkey = os.pullEvent("key")
+
+    if optkey == keys.one then
+      os.reboot()
+    end
+  end
+elseif key == keys.two then
+  sleep(0.05)
+  term.clear()
+  term.setCursorPos(2, middle-1)
+  term.write("Are you sure?")
+  term.setCursorPos(2, middle)
+  term.write("[1] Yes")
+  term.setCursorPos(2, middle+1)
+  term.write("[2] No")
+
+  local _, optkey = os.pullEvent("key")
+
+  if optkey == keys.one then
+    local configFile = fs.open("core/settings.cfg", "w");
+    configFile.write(textutils.serialise({
+      bg = colors.white,
+      fg = colors.black,
+      pfg = colors.gray,
+      username = "FlipOS Guest",
+      passedIntro = false,
+      customPath = {}
+    }))
+    configFile.flush()
+    configFile.close()
+    os.reboot()
+  end
+end
+
+sleep(0.05)
+configFileW.write(textutils.serialise(setsCfg))
+configFileW.flush()
+configFileW.close()

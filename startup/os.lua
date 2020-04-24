@@ -2,6 +2,8 @@ local path = {
   {"edit", "core/apps/opedit"}
 }
 
+local colors = colors;
+
 local function flip()
   local w, h = term.getSize()
   local middle = math.floor(h/2)
@@ -44,6 +46,7 @@ local function flip()
       {text = "LuaIDE", script = "core/apps/luaide", luaCode = false, colors = {colors.white, colors.purple}},
       {text = "NPaintPro", script = "core/apps/npaintpro", luaCode = false, colors = {colors.white, colors.blue}},
       {text = "Sketch", script = "core/apps/sketch", luaCode = false, colors = {colors.black, colors.lightBlue}},
+      {text = "STD-GUI", script = "core/apps/stdgui", luaCode = false, colors = {colors.orange, colors.gray}},
       {text = "Shell", script = "fg", luaCode = false, colors = {colors.yellow, colors.black}},
       {text = "Lua", script = "fg lua", luaCode = false, colors = {colors.blue, colors.lightBlue}},
 
@@ -54,7 +57,7 @@ local function flip()
       -- System options
       {text = "Shutdown", script = "os.shutdown()", luaCode = true, colors = {colors.white, colors.red}},
       {text = "Reboot", script = "os.reboot()", luaCode = true, colors = {colors.black, colors.orange}},
-      {text = "Settings", script = "edit core/settings.cfg", luaCode = false, colors = {colors.black, colors.lightGray}},
+      {text = "Settings", script = "core/apps/settings", luaCode = false, colors = {colors.black, colors.lightGray}},
       {text = "Update", script = "core/apps/updater", luaCode = false, colors = {colors.white, colors.lime}},
       {text = "Exit to CraftOS", script = "os.queueEvent('terminate')", luaCode = true, colors = {colors.black, colors.yellow}}
     },
@@ -79,7 +82,7 @@ local function flip()
     }
   }
 
-  if not fs.exists("core/settings.cfg") then
+  if not fs.exists("core/settings.cfg") or type(textutils.unserialise(fs.open("core/settings.cfg", "r").readAll())) ~= "table" then
     local configFile = fs.open("core/settings.cfg", "w")
     configFile.write(textutils.serialise({
       bg = colors.white,
@@ -93,7 +96,7 @@ local function flip()
     configFile.close()
   end
 
-  if not fs.exists("core/apps.cfg") then
+  if not fs.exists("core/apps.cfg") or type(textutils.unserialise(fs.open("core/apps.cfg", "r").readAll())) ~= "table" then
     local configFile = fs.open("core/apps.cfg", "w");
     configFile.write(textutils.serialise({}))
     configFile.flush()
@@ -167,44 +170,44 @@ local function flip()
 
     -- Get Input Start
       while true do
-      term.setCursorPos(2, middle)
-      term.setTextColor(flconfig.tourMenuOptions[flconfig.menuPosition].colors[1])
-      term.setBackgroundColor(flconfig.tourMenuOptions[flconfig.menuPosition].colors[2])
-      term.clearLine()
-      term.write(flconfig.tourMenuOptions[flconfig.menuPosition].text)
-      term.setTextColor(flconfig.userconfigs.pfg)
-      term.setBackgroundColor(flconfig.userconfigs.bg)
+        term.setCursorPos(2, middle)
+        term.setTextColor(flconfig.tourMenuOptions[flconfig.menuPosition].colors[1])
+        term.setBackgroundColor(flconfig.tourMenuOptions[flconfig.menuPosition].colors[2])
+        term.clearLine()
+        term.write(flconfig.tourMenuOptions[flconfig.menuPosition].text)
+        term.setTextColor(flconfig.userconfigs.pfg)
+        term.setBackgroundColor(flconfig.userconfigs.bg)
 
-      if flconfig.tourMenuOptions[flconfig.menuPosition-1] ~= nil then
-        term.setCursorPos(2, middle-1)
-        term.write(flconfig.tourMenuOptions[flconfig.menuPosition-1].text)
-      else
-        term.setCursorPos(2, middle-1)
-        term.write(flconfig.tourMenuOptions[table.getn(flconfig.tourMenuOptions)].text)
-      end
-
-      if flconfig.tourMenuOptions[flconfig.menuPosition+1] ~= nil then
-        term.setCursorPos(2, middle+1)
-        term.write(flconfig.tourMenuOptions[flconfig.menuPosition+1].text)
-      else
-        term.setCursorPos(2, middle+1)
-        term.write(flconfig.tourMenuOptions[1].text)
-      end
-
-      local _, key = os.pullEvent("key")
-      if key == keys.up then
-        flconfig.menuPosition = flconfig.menuPosition - 1
-        if flconfig.menuPosition <= 0 then
-          flconfig.menuPosition = table.getn(flconfig.tourMenuOptions)
+        if flconfig.tourMenuOptions[flconfig.menuPosition-1] ~= nil then
+          term.setCursorPos(2, middle-1)
+          term.write(flconfig.tourMenuOptions[flconfig.menuPosition-1].text)
+        else
+          term.setCursorPos(2, middle-1)
+          term.write(flconfig.tourMenuOptions[table.getn(flconfig.tourMenuOptions)].text)
         end
-      elseif key == keys.down then
-        flconfig.menuPosition = flconfig.menuPosition + 1
-        if flconfig.menuPosition > table.getn(flconfig.tourMenuOptions) then
-          flconfig.menuPosition = 1
+
+        if flconfig.tourMenuOptions[flconfig.menuPosition+1] ~= nil then
+          term.setCursorPos(2, middle+1)
+          term.write(flconfig.tourMenuOptions[flconfig.menuPosition+1].text)
+        else
+          term.setCursorPos(2, middle+1)
+          term.write(flconfig.tourMenuOptions[1].text)
         end
-      elseif key == keys.enter then        
-        break
-      end
+
+        local _, key = os.pullEvent("key")
+        if key == keys.up then
+          flconfig.menuPosition = flconfig.menuPosition - 1
+          if flconfig.menuPosition <= 0 then
+            flconfig.menuPosition = table.getn(flconfig.tourMenuOptions)
+          end
+        elseif key == keys.down then
+          flconfig.menuPosition = flconfig.menuPosition + 1
+          if flconfig.menuPosition > table.getn(flconfig.tourMenuOptions) then
+            flconfig.menuPosition = 1
+          end
+        elseif key == keys.enter then
+          break
+        end
       end
     -- Get Input End
 
@@ -247,6 +250,10 @@ local function flip()
   end
 
   flconfig.userconfigs = textutils.unserialise(configFile)
+  
+  if fs.exists('autoexec.lua') then
+    dofile('autoexec.lua')
+  end
 
   term.setBackgroundColor(flconfig.userconfigs.bg)
   term.setTextColor(flconfig.userconfigs.fg)
@@ -258,7 +265,7 @@ local function flip()
   term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
   term.write(flconfig.userconfigs.username)
   term.setCursorPos(2, h-1)
-  term.write("Version 1.1")
+  term.write("Version 1.2.0")
 
   for _, program in pairs(flconfig.userconfigs.customPath) do
     table.insert(path, program)
@@ -269,7 +276,25 @@ local function flip()
   end
 
   for _, program in pairs(textutils.unserialise(fs.open("core/apps.cfg", "r").readAll())) do
-    table.insert(flconfig.menuOptions, {text = program.name, script = program.path, colors = {program.colors.fg, program.colors.bg}})
+    local isFgValid = false
+    local isBgValid = false
+    
+    for _, color in pairs(colors) do      
+      if type(color) == "number" then
+        if program.colors.fg == color then
+          isFgValid = true
+        end
+
+        if program.colors.bg == color then
+          isBgValid = true
+        end
+      end
+    end
+    if isFgValid and isBgValid then
+      table.insert(flconfig.menuOptions, {text = program.name, script = program.path, colors = {program.colors.fg, program.colors.bg}})
+    else
+      table.insert(flconfig.menuOptions, {text = program.name .. " \7", script = program.path, colors = {flconfig.userconfigs.bg, flconfig.userconfigs.fg}})
+    end
   end
 
   while true do
@@ -337,7 +362,7 @@ local function flip()
       term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
       term.write(flconfig.userconfigs.username)
       term.setCursorPos(2, h-1)
-      term.write("Version 1.1")
+      term.write("Version 1.2.0")
     -- Refresh Menu End
   end
 end
