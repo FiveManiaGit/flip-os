@@ -63,6 +63,7 @@ local function flip()
       {text = "Reboot", script = "os.reboot()", useBlit = false, luaCode = true, colors = {colors.black, colors.orange}},
       {text = "Settings", script = "core/apps/settings", useBlit = false, luaCode = false, colors = {colors.black, colors.lightGray}},
       {text = "Themes", script = "core/apps/themes", useBlit = false, luaCode = false, colors = {colors.white, colors.magenta}},
+      {text = "Kiosk Mode", script = "core/apps/kiosk", useBlit = false, luaCode = false, colors = {colors.gray, colors.yellow}},
       {text = "Update", script = "core/apps/updater", useBlit = false, luaCode = false, colors = {colors.white, colors.lime}},
       {text = "Changelog", script = "core/apps/changelog", useBlit = false, luaCode = false, colors = {colors.black, colors.pink}},
       {text = "Exit to CraftOS", script = "os.queueEvent('terminate')", useBlit = false, luaCode = true, colors = {colors.black, colors.yellow}}
@@ -98,6 +99,7 @@ local function flip()
       term.clear()
       term.write("Backup settings restored!")
       sleep(2)
+      os.reboot()
     end
     fs.delete("core/settings.cfg.bak")
   end
@@ -325,7 +327,7 @@ local function flip()
   term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
   term.write(flconfig.userconfigs.username)
   term.setCursorPos(2, h-1)
-  term.write("Version 1.2.3")
+  term.write("Version 1.2.4")
 
   for _, program in pairs(flconfig.userconfigs.customPath) do
     table.insert(path, program)
@@ -400,24 +402,47 @@ local function flip()
     -- Draw Menu End
 
     -- Get Input Start
-      local _, key = os.pullEvent("key")
-      if key == keys.up then
-        flconfig.menuPosition = flconfig.menuPosition - 1
+      local e, a = os.pullEvent()
+      if e == "key" then
+        if a == keys.up then
+          flconfig.menuPosition = flconfig.menuPosition - 1
+          if flconfig.menuPosition <= 0 then
+            flconfig.menuPosition = table.getn(flconfig.menuOptions)
+          end
+        elseif a == keys.down then
+          flconfig.menuPosition = flconfig.menuPosition + 1
+          if flconfig.menuPosition > table.getn(flconfig.menuOptions) then
+            flconfig.menuPosition = 1
+          end
+        elseif a == keys.enter then
+          if flconfig.menuOptions[flconfig.menuPosition].luaCode then
+            load(flconfig.menuOptions[flconfig.menuPosition].script)()
+          else
+            shell.run(flconfig.menuOptions[flconfig.menuPosition].script)
+          end
+        end
+      elseif e == "mouse_scroll" then
+        flconfig.menuPosition = flconfig.menuPosition + a
         if flconfig.menuPosition <= 0 then
           flconfig.menuPosition = table.getn(flconfig.menuOptions)
         end
-      elseif key == keys.down then
-        flconfig.menuPosition = flconfig.menuPosition + 1
+        
         if flconfig.menuPosition > table.getn(flconfig.menuOptions) then
           flconfig.menuPosition = 1
         end
-      elseif key == keys.enter then
+      elseif e == "mouse_click" or e == "monitor_touch" then
         if flconfig.menuOptions[flconfig.menuPosition].luaCode then
           load(flconfig.menuOptions[flconfig.menuPosition].script)()
         else
           shell.run(flconfig.menuOptions[flconfig.menuPosition].script)
         end
+      elseif e == "term_resize" or e == "monitor_resize" then
+        w, h = term.getSize()
+        middle = math.floor(h/2)
       end
+
+      w, h = term.getSize()
+      middle = math.floor(h/2)
     -- Get Input End
 
     -- Refresh Menu Start
@@ -431,7 +456,7 @@ local function flip()
       term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
       term.write(flconfig.userconfigs.username)
       term.setCursorPos(2, h-1)
-      term.write("Version 1.2.3")
+      term.write("Version 1.2.4")
     -- Refresh Menu End
   end
 end

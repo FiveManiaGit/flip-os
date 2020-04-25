@@ -100,9 +100,6 @@ if key == keys.one then
 
     if optkey == keys.one then
       os.reboot()
-    else
-      configFileW.write(textutils.serialise(setsCfg))
-      configFileW.flush()
     end
   elseif cfgkey == keys.two then
     sleep(0.05)
@@ -146,9 +143,6 @@ if key == keys.one then
 
     if optkey == keys.one then
       os.reboot()
-    else
-      configFileW.write(textutils.serialise(setsCfg))
-      configFileW.flush()
     end
   elseif cfgkey == keys.three then
     sleep(0.05)
@@ -192,9 +186,6 @@ if key == keys.one then
 
     if optkey == keys.one then
       os.reboot()
-    else
-      configFileW.write(textutils.serialise(setsCfg))
-      configFileW.flush()
     end
   elseif cfgkey == keys.four then
     sleep(0.05)
@@ -234,9 +225,6 @@ if key == keys.one then
 
     if optkey == keys.one then
       os.reboot()
-    else
-      configFileW.write(textutils.serialise(setsCfg))
-      configFileW.flush()
     end
   elseif cfgkey == keys.five then
     sleep(0.05)
@@ -254,9 +242,6 @@ if key == keys.one then
 
     if optkey == keys.one then
       os.reboot()
-    else
-      configFileW.write(textutils.serialise(setsCfg))
-      configFileW.flush()
     end
   end
 elseif key == keys.two then
@@ -285,8 +270,9 @@ elseif key == keys.two then
     configFile.close()
     os.reboot()
   end
+else
+  configFileW.write(textutils.serialise(setsCfg))
+  configFileW.flush()
 end
 
-configFileW.write(textutils.serialise(setsCfg))
-configFileW.flush()
 sleep(0.05)

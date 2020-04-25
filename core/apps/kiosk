@@ -1,0 +1,4 @@
+term.clear()
+term.setCursorPos(2, 2)
+term.write("Running on Kiosk Mode...")
+term.redirect(peripheral.find("monitor"))
