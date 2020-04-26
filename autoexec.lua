@@ -28,11 +28,11 @@ local _, key = os.pullEvent("key")
 
 if key == keys.one then
   print('Applying new file format...')
-  local file = fs.open('core/apps.cfg', 'w')
-  local fileRead = fs.open('core/apps.cfg', 'r').readAll()
+  local fileRead = fs.open('core/settings.cfg', 'r').readAll()
+  local file = fs.open('core/settings.cfg', 'w')  
   local setsCfg = textutils.unserialise(fileRead)
 
-  table.insert(setsCfg, listMaxItem, 3)
+  setsCfg.listMaxItem = 3
 
   file.write(textutils.serialise(setsCfg))
   file.flush()
