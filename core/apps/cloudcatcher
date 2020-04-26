@@ -1,0 +1,9 @@
+local w, h = term.getSize()
+local middle = math.floor(h/2)
+
+term.setCursorPos(2, middle)
+term.clear()
+term.write("Cloud Catcher Key: ")
+local cckey = read()
+
+shell.run("core/apps/cloud.lua " .. cckey)

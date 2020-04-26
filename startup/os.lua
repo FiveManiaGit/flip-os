@@ -53,6 +53,7 @@ local function flip()
       {text = "Shell", script = "fg", useBlit = false, luaCode = false, colors = {colors.yellow, colors.black}},
       {text = "Lua", script = "fg lua", useBlit = false, luaCode = false, colors = {colors.blue, colors.lightBlue}},
       {text = "Clock", script = "core/apps/clock", useBlit = false, luaCode = false, colors = {colors.lightGray, colors.gray}},
+      {text = "Cloud Catcher", script = "core/apps/cloudcatcher", useBlit = false, luaCode = false, colors = {colors.lightBlue, colors.blue}},
 
       -- Games
       {text = "Redirection", script = "rom/programs/fun/advanced/redirection.lua", useBlit = false, luaCode = false, colors = {colors.lightBlue, colors.gray}},
@@ -112,6 +113,7 @@ local function flip()
       pfg = colors.lightGray,
       username = flconfig.userconfigs.username,
       passedIntro = false,
+      listMaxItem = 3,
       customPath = {}
     }))
     configFile.flush()
@@ -289,6 +291,7 @@ local function flip()
       pfg = colors.lightGray,
       username = uname,
       passedIntro = true,
+      listMaxItem = 3,
       customPath = {}
     }))
     configFile.flush()
@@ -327,7 +330,8 @@ local function flip()
   term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
   term.write(flconfig.userconfigs.username)
   term.setCursorPos(2, h-1)
-  term.write("Version 1.2.4")
+  term.write("Version 1.2.5")
+  term.setCursorBlink(false)
 
   for _, program in pairs(flconfig.userconfigs.customPath) do
     table.insert(path, program)
@@ -378,27 +382,122 @@ local function flip()
       term.setTextColor(flconfig.userconfigs.pfg)
       term.setBackgroundColor(flconfig.userconfigs.bg)
 
-      if flconfig.menuOptions[flconfig.menuPosition-1] ~= nil then
-        term.setCursorPos(2, middle-1)
-        term.write(flconfig.menuOptions[flconfig.menuPosition-1].text)
-      else
-        term.setCursorPos(2, middle-1)
-        term.write(flconfig.menuOptions[table.getn(flconfig.menuOptions)].text)
+      if flconfig.userconfigs.listMaxItem == 3 then
+        if flconfig.menuOptions[flconfig.menuPosition-1] ~= nil then
+          term.setCursorPos(2, middle-1)
+          term.write(flconfig.menuOptions[flconfig.menuPosition-1].text)
+        else
+          term.setCursorPos(2, middle-1)
+          term.write(flconfig.menuOptions[table.getn(flconfig.menuOptions)].text)
+        end
+  
+        if flconfig.menuOptions[flconfig.menuPosition+1] ~= nil then
+          term.setCursorPos(2, middle+1)
+          term.write(flconfig.menuOptions[flconfig.menuPosition+1].text)
+        else
+          term.setCursorPos(2, middle+1)
+          term.write(flconfig.menuOptions[1].text)
+        end
+
+        term.setCursorPos(w-1, middle-1)
+        term.write("\24")
+
+        term.setCursorPos(w-1, middle+1)
+        term.write("\25")
+      elseif flconfig.userconfigs.listMaxItem == 5 then
+        if flconfig.menuOptions[flconfig.menuPosition-1] ~= nil then
+          term.setCursorPos(2, middle-1)
+          term.write(flconfig.menuOptions[flconfig.menuPosition-1].text)
+        else
+          term.setCursorPos(2, middle-1)
+          term.write(flconfig.menuOptions[table.getn(flconfig.menuOptions)].text)
+        end
+
+        if flconfig.menuOptions[flconfig.menuPosition-2] ~= nil then
+          term.setCursorPos(2, middle-2)
+          term.write(flconfig.menuOptions[flconfig.menuPosition-2].text)
+        else
+          term.setCursorPos(2, middle-2)
+          term.write(flconfig.menuOptions[table.getn(flconfig.menuOptions)-1].text)
+        end
+  
+        if flconfig.menuOptions[flconfig.menuPosition+1] ~= nil then
+          term.setCursorPos(2, middle+1)
+          term.write(flconfig.menuOptions[flconfig.menuPosition+1].text)
+        else
+          term.setCursorPos(2, middle+1)
+          term.write(flconfig.menuOptions[1].text)
+        end
+
+        if flconfig.menuOptions[flconfig.menuPosition+2] ~= nil then
+          term.setCursorPos(2, middle+2)
+          term.write(flconfig.menuOptions[flconfig.menuPosition+2].text)
+        else
+          term.setCursorPos(2, middle+2)
+          term.write(flconfig.menuOptions[2].text)
+        end
+
+        term.setCursorPos(w-1, middle-2)
+        term.write("\24")
+
+        term.setCursorPos(w-1, middle+2)
+        term.write("\25")
+      elseif flconfig.userconfigs.listMaxItem == 7 then
+        if flconfig.menuOptions[flconfig.menuPosition-1] ~= nil then
+          term.setCursorPos(2, middle-1)
+          term.write(flconfig.menuOptions[flconfig.menuPosition-1].text)
+        else
+          term.setCursorPos(2, middle-1)
+          term.write(flconfig.menuOptions[table.getn(flconfig.menuOptions)].text)
+        end
+
+        if flconfig.menuOptions[flconfig.menuPosition-2] ~= nil then
+          term.setCursorPos(2, middle-2)
+          term.write(flconfig.menuOptions[flconfig.menuPosition-2].text)
+        else
+          term.setCursorPos(2, middle-2)
+          term.write(flconfig.menuOptions[table.getn(flconfig.menuOptions)-1].text)
+        end
+
+        if flconfig.menuOptions[flconfig.menuPosition-3] ~= nil then
+          term.setCursorPos(2, middle-3)
+          term.write(flconfig.menuOptions[flconfig.menuPosition-3].text)
+        else
+          term.setCursorPos(2, middle-3)
+          term.write(flconfig.menuOptions[table.getn(flconfig.menuOptions)-2].text)
+        end
+  
+        if flconfig.menuOptions[flconfig.menuPosition+1] ~= nil then
+          term.setCursorPos(2, middle+1)
+          term.write(flconfig.menuOptions[flconfig.menuPosition+1].text)
+        else
+          term.setCursorPos(2, middle+1)
+          term.write(flconfig.menuOptions[1].text)
+        end
+
+        if flconfig.menuOptions[flconfig.menuPosition+2] ~= nil then
+          term.setCursorPos(2, middle+2)
+          term.write(flconfig.menuOptions[flconfig.menuPosition+2].text)
+        else
+          term.setCursorPos(2, middle+2)
+          term.write(flconfig.menuOptions[2].text)
+        end
+
+        if flconfig.menuOptions[flconfig.menuPosition+3] ~= nil then
+          term.setCursorPos(2, middle+3)
+          term.write(flconfig.menuOptions[flconfig.menuPosition+3].text)
+        else
+          term.setCursorPos(2, middle+3)
+          term.write(flconfig.menuOptions[3].text)
+        end
+
+        term.setCursorPos(w-1, middle-3)
+        term.write("\24")
+
+        term.setCursorPos(w-1, middle+3)
+        term.write("\25")
       end
-
-      if flconfig.menuOptions[flconfig.menuPosition+1] ~= nil then
-        term.setCursorPos(2, middle+1)
-        term.write(flconfig.menuOptions[flconfig.menuPosition+1].text)
-      else
-        term.setCursorPos(2, middle+1)
-        term.write(flconfig.menuOptions[1].text)
-      end
-
-      term.setCursorPos(w-1, middle-1)
-      term.write("\24")
-
-      term.setCursorPos(w-1, middle+1)
-      term.write("\25")
+      term.setCursorBlink(false)
     -- Draw Menu End
 
     -- Get Input Start
@@ -436,6 +535,7 @@ local function flip()
         else
           shell.run(flconfig.menuOptions[flconfig.menuPosition].script)
         end
+        term.setCursorBlink(false)
       elseif e == "term_resize" or e == "monitor_resize" then
         w, h = term.getSize()
         middle = math.floor(h/2)
@@ -456,7 +556,8 @@ local function flip()
       term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
       term.write(flconfig.userconfigs.username)
       term.setCursorPos(2, h-1)
-      term.write("Version 1.2.4")
+      term.write("Version 1.2.5")
+      term.setCursorBlink(false)
     -- Refresh Menu End
   end
 end
