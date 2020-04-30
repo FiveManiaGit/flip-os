@@ -26,14 +26,28 @@ term.setBackgroundColor(setsCfg.bg)
 term.setTextColor(setsCfg.fg)
 term.clear()
 
-term.setCursorPos(2, middle-2)
+term.setCursorPos(2, middle-5)
 term.write("Select a new theme")
-term.setCursorPos(2, middle)
+term.setCursorPos(2, middle-3)
 term.write("[1] Light")
-term.setCursorPos(2, middle+1)
+term.setCursorPos(2, middle-2)
 term.write("[2] Dark")
-term.setCursorPos(2, middle+2)
+term.setCursorPos(2, middle-1)
 term.write("[3] Darker")
+term.setCursorPos(2, middle-1)
+term.write("[3] Darker")
+term.setCursorPos(2, middle)
+term.write("[4] Fire")
+term.setCursorPos(2, middle+1)
+term.write("[5] Water")
+term.setCursorPos(2, middle+2)
+term.write("[6] Nature")
+term.setCursorPos(2, middle+3)
+term.write("[7] Rose")
+term.setCursorPos(2, middle+4)
+term.write("[8] Air")
+term.setCursorPos(2, middle+5)
+term.write("[9] Portal")
 
 local _, key = os.pullEvent("key")
 
@@ -85,6 +99,138 @@ elseif key == keys.three then
   setsCfg.bg = colors.black
   setsCfg.fg = colors.white
   setsCfg.pfg = colors.lightGray
+
+  configFileW.write(textutils.serialise(setsCfg))
+  configFileW.flush()
+  configFileW.close()
+
+  term.clear()
+  term.setCursorPos(2, middle-1)
+  term.write("Reboot to apply changes?")
+  term.setCursorPos(2, middle)
+  term.write("[1] Yes")
+  term.setCursorPos(2, middle+1)
+  term.write("[2] No")
+
+  local _, optkey = os.pullEvent("key")
+
+  if optkey == keys.one then
+    os.reboot()
+  end
+elseif key == keys.four then
+  setsCfg.bg = colors.red
+  setsCfg.fg = colors.white
+  setsCfg.pfg = colors.pink
+
+  configFileW.write(textutils.serialise(setsCfg))
+  configFileW.flush()
+  configFileW.close()
+
+  term.clear()
+  term.setCursorPos(2, middle-1)
+  term.write("Reboot to apply changes?")
+  term.setCursorPos(2, middle)
+  term.write("[1] Yes")
+  term.setCursorPos(2, middle+1)
+  term.write("[2] No")
+
+  local _, optkey = os.pullEvent("key")
+
+  if optkey == keys.one then
+    os.reboot()
+  end
+elseif key == keys.five then
+  setsCfg.bg = colors.blue
+  setsCfg.fg = colors.white
+  setsCfg.pfg = colors.lightBlue
+
+  configFileW.write(textutils.serialise(setsCfg))
+  configFileW.flush()
+  configFileW.close()
+
+  term.clear()
+  term.setCursorPos(2, middle-1)
+  term.write("Reboot to apply changes?")
+  term.setCursorPos(2, middle)
+  term.write("[1] Yes")
+  term.setCursorPos(2, middle+1)
+  term.write("[2] No")
+
+  local _, optkey = os.pullEvent("key")
+
+  if optkey == keys.one then
+    os.reboot()
+  end
+elseif key == keys.six then
+  setsCfg.bg = colors.green
+  setsCfg.fg = colors.white
+  setsCfg.pfg = colors.white
+
+  configFileW.write(textutils.serialise(setsCfg))
+  configFileW.flush()
+  configFileW.close()
+
+  term.clear()
+  term.setCursorPos(2, middle-1)
+  term.write("Reboot to apply changes?")
+  term.setCursorPos(2, middle)
+  term.write("[1] Yes")
+  term.setCursorPos(2, middle+1)
+  term.write("[2] No")
+
+  local _, optkey = os.pullEvent("key")
+
+  if optkey == keys.one then
+    os.reboot()
+  end
+elseif key == keys.seven then
+  setsCfg.bg = colors.pink
+  setsCfg.fg = colors.black
+  setsCfg.pfg = colors.red
+
+  configFileW.write(textutils.serialise(setsCfg))
+  configFileW.flush()
+  configFileW.close()
+
+  term.clear()
+  term.setCursorPos(2, middle-1)
+  term.write("Reboot to apply changes?")
+  term.setCursorPos(2, middle)
+  term.write("[1] Yes")
+  term.setCursorPos(2, middle+1)
+  term.write("[2] No")
+
+  local _, optkey = os.pullEvent("key")
+
+  if optkey == keys.one then
+    os.reboot()
+  end
+elseif key == keys.eight then
+  setsCfg.bg = colors.lightBlue
+  setsCfg.fg = colors.black
+  setsCfg.pfg = colors.blue
+
+  configFileW.write(textutils.serialise(setsCfg))
+  configFileW.flush()
+  configFileW.close()
+
+  term.clear()
+  term.setCursorPos(2, middle-1)
+  term.write("Reboot to apply changes?")
+  term.setCursorPos(2, middle)
+  term.write("[1] Yes")
+  term.setCursorPos(2, middle+1)
+  term.write("[2] No")
+
+  local _, optkey = os.pullEvent("key")
+
+  if optkey == keys.one then
+    os.reboot()
+  end
+elseif key == keys.nine then
+  setsCfg.bg = colors.purple
+  setsCfg.fg = colors.white
+  setsCfg.pfg = colors.pink
 
   configFileW.write(textutils.serialise(setsCfg))
   configFileW.flush()

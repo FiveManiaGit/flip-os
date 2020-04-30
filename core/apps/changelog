@@ -27,10 +27,10 @@ term.setBackgroundColor(setsCfg.bg)
 term.setTextColor(setsCfg.fg)
 
 term.setCursorPos(1, 6)
-local res = http.get("https://pastebin.com/raw/FyuUj8nU").readAll()
+local res = fs.open("core/changelog", "r").readAll()
 if res ~= nil then
   print(res)
 else
-  print("Internet connection required.")
+  print("An error ocurred and we couldn't load the changelog. Sorry.")
 end
 os.pullEvent("key")

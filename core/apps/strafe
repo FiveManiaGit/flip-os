@@ -28,9 +28,9 @@ function split(pString, pPattern)
 end
 
 function install(game)
-  if not fs.isDir(dir.."strafedata/"..game) then
-    fs.delete(dir.."strafedata/"..game)
-    fs.makeDir(dir.."strafedata/"..game)
+  if not fs.isDir("strafedata/"..game) then
+    fs.delete("strafedata/"..game)
+    fs.makeDir("strafedata/"..game)
   end
   local _d = shell.dir()
   local i = split(online[game].install, "|")
@@ -38,13 +38,13 @@ function install(game)
   term.setBackgroundColor(colors.black)
   term.setCursorPos(1, 1)
   term.clear()
-  shell.run("cd /"..dir.."strafedata/"..game)
+  shell.run("cd /strafedata/"..game)
   for k,v in pairs(i) do
-    shell.run(({v:gsub("?", dir.."strafedata/"..game)})[1])
+    shell.run(({v:gsub("?", "strafedata/"..game)})[1])
   end
   shell.run("cd /".._d)
   online[game].banner = online[game].banner:saveString()
-  local f = fs.open(dir.."strafedata/"..game..".tab", "w")
+  local f = fs.open("strafedata/"..game..".tab", "w")
   f.write(textutils.serialize(online[game]))
   f.close()
   online[game].banner = surface.loadString(online[game].banner)
@@ -55,10 +55,10 @@ end
 
 function updateGames()
   games = { }
-  for k,v in pairs(fs.list(dir.."strafedata")) do
+  for k,v in pairs(fs.list("strafedata")) do
     if v:sub(#v - 3, #v) == ".tab" then
       local name = v:sub(1, #v - 4)
-      local f = fs.open(dir.."strafedata/"..v, "r")
+      local f = fs.open("strafedata/"..v, "r")
       games[name] = textutils.unserialize(f.readAll())
       games[name]["banner"] = surface.loadString(games[name]["banner"])
       f.close()
@@ -176,7 +176,7 @@ function onClick(x, y)
       if id == i then
         if xx >= 1 and xx <= 4 and yy == 5 then
           local d = shell.dir()
-          shell.run("cd /"..dir.."strafedata/"..k.."/"..v.launchdir)
+          shell.run("cd /strafedata/"..k.."/"..v.launchdir)
           term.setTextColor(colors.white)
           term.setBackgroundColor(colors.black)
           term.setCursorPos(1, 1)
@@ -186,8 +186,8 @@ function onClick(x, y)
           timer = os.startTimer(0)
           updateSize()
         elseif xx >= 6 and xx <= 11 and yy == 5 then
-          fs.delete(dir.."strafedata/"..k)
-          fs.delete(dir.."strafedata/"..k..".tab")
+          fs.delete("strafedata/"..k)
+          fs.delete("strafedata/"..k..".tab")
           updateGames()
         end
       end
@@ -207,8 +207,8 @@ function onClick(x, y)
           install(k)
         elseif xx >= 1 and xx <= 6 and yy == 5 and games[k] then
           if games[k].version ~= v.version then
-            fs.delete(dir.."strafedata/"..k)
-            fs.delete(dir.."strafedata/"..k..".tab")
+            fs.delete("strafedata/"..k)
+            fs.delete("strafedata/"..k..".tab")
             install(k)
           end
         end
@@ -219,18 +219,18 @@ function onClick(x, y)
 end
 
 dir = fs.getDir(shell.getRunningProgram()).."/"
-if not fs.isDir(dir.."strafedata") then
-  fs.delete(dir.."strafedata")
-  fs.makeDir(dir.."strafedata")
+if not fs.isDir("strafedata") then
+  fs.delete("strafedata")
+  fs.makeDir("strafedata")
 end
-if not fs.exists(dir.."strafedata/surface") or fs.isDir(dir.."strafedata/surface") then
-  fs.delete(dir.."strafedata/surface")
+if not fs.exists("strafedata/surface") or fs.isDir("strafedata/surface") then
+  fs.delete("strafedata/surface")
   local d = shell.dir()
-  shell.run("cd /"..dir.."strafedata")
+  shell.run("cd /strafedata")
   shell.run("pastebin get J2Y288mW surface")
   shell.run("cd /"..d)
 end
-os.loadAPI(dir.."strafedata/surface")
+os.loadAPI("strafedata/surface")
 updateSize()
 local _off = math.floor(width / 2) surf:drawText(1, 1, "Made by CrazedProgrammer") local cp = surface.loadString("_00100010208f208f208f208f208f208f208f208f208f208f208f208f208f208f208f208f208f20ff20ff20ff20ff20ff20ff20ff20ff20ff20ff20ff20ff20ff20ff207f208f20ff20ff200f200f20ff200f200f20ff20ff20ff20ff20ff20ff20ff207f208f20ff200f20ff20ff20ff200f20ff200f20ff20ff20ff20ff20ff20ff207f208f20ff200f20ff20ff20ff200f200f20ff20ff20ff20ff20ff20ff20ff207f208f20ff200f20ff20ff20ff200f20ff20ff20ff20ff20ff20ff20ff20ff207f208f20ff20ff200f200f20ff200f20ff20ff20ff200f200f200f20ff20ff207f208f20ff20ff20ff20ff20ff20ff20ff20ff20ff20ff20ff20ff20ff20ff207f208f207f207f207f207f207f207f207f207f207f207f207f207f207f207f207f20_720_720_720_720_720_720_72077207720_720_720_720_720_720_720_720_720_720_720_720_720_7207720772077207720_720_720_720_720_720_720872087208720872087208720872087208720872087208720872087208720872087208720872087208720872087208720872087208720872087208720872077208720772077207720772077208720772077208720772077208720b72087207720872087208720872087208720872087208720872087208720872087208720772077207720772077207720772077207720772077207720772077207720772077") for i=1,16,1 do local surf2 = surface.create(i, i) surf2:drawSurfaceScaled(1, 1, i, i, cp) surf:fillRect(1, 2, width, height, nil, colors.black) surf:drawSurfaceRotated(_off, 10, i / 2, i / 2, 4 - i / 4, surf2) surf:render() os.sleep(0) end for i=1,4,1 do surf:fillRect(1, 2, width, height, nil, colors.black) surf:drawSurface(_off - 7, 3, cp) surf:drawLine(_off - 7, i * 4, _off + i * 4 - 11, 3, nil, colors.white) surf:drawLine(_off - 7, 1 + i * 4, _off + i * 4 - 10, 3, nil, colors.white) surf:drawLine(_off - 7, 2 + i * 4, _off + i * 4 - 9, 3, nil, colors.white) surf:render() os.sleep(0) end for i=1,4,1 do surf:fillRect(1, 2, width, height, nil, colors.black) surf:drawSurface(_off - 7, 3, cp) surf:drawLine(_off + i * 4 - 11, 18, _off + 8, i * 4, nil, colors.white) surf:drawLine(_off + i * 4 - 10, 18, _off + 8, 1 + i * 4, nil, colors.white) surf:drawLine(_off + i * 4 - 9, 18, _off + 8, 2 + i * 4, nil, colors.white) surf:render() os.sleep(0) end
 games = { }

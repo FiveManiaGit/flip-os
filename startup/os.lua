@@ -1,3 +1,5 @@
+multishell.setTitle(1, "Flip")
+
 local path = {
   {"edit", "core/apps/opedit"}
 }
@@ -50,8 +52,8 @@ local function flip()
       {text = "Sketch", script = "core/apps/sketch", useBlit = false, luaCode = false, colors = {colors.black, colors.lightBlue}},
       {text = "STD-GUI", script = "core/apps/stdgui", useBlit = false, luaCode = false, colors = {colors.orange, colors.gray}},
       {text = "Enchat 3", script = "core/apps/enchat3", useBlit = true, blit = "e145db7a", blitBg = "ffffffff", luaCode = false, colors = {colors.lightBlue, colors.black}},
-      {text = "Shell", script = "fg", useBlit = false, luaCode = false, colors = {colors.yellow, colors.black}},
-      {text = "Lua", script = "fg lua", useBlit = false, luaCode = false, colors = {colors.blue, colors.lightBlue}},
+      {text = "Shell", script = "shell.lua", useBlit = false, luaCode = false, colors = {colors.yellow, colors.black}},
+      {text = "Lua", script = "core/apps/luashell.lua", useBlit = false, luaCode = false, colors = {colors.blue, colors.lightBlue}},
       {text = "Clock", script = "core/apps/clock", useBlit = false, luaCode = false, colors = {colors.lightGray, colors.gray}},
       {text = "Cloud Catcher", script = "core/apps/cloudcatcher", useBlit = false, luaCode = false, colors = {colors.lightBlue, colors.blue}},
 
@@ -84,7 +86,7 @@ local function flip()
       bg = colors.white,
       fg = colors.black,
       pfg = colors.gray,
-      username = "FlipOS Guest",
+      username = "Flip Guest",
       passedIntro = false,
       customPath = {}
     }
@@ -157,12 +159,12 @@ local function flip()
     flapis.text.fadeOut("at any moment of this tutorial.", 2, middle+1, 0.15)
     
     parallel.waitForAny(function()
-      flapis.text.fadeIn("Welcome to FlipOS!", 2, middle, 0.15)
+      flapis.text.fadeIn("Welcome to Flip!", 2, middle, 0.15)
       sleep(2)
-      flapis.text.fadeOut("Welcome to FlipOS!", 2, middle, 0.15)
-      flapis.text.fadeIn("FlipOS is an operating system made in Lua", 2, middle, 0.15)
+      flapis.text.fadeOut("Welcome to Flip!", 2, middle, 0.15)
+      flapis.text.fadeIn("Flip is an operating system made in Lua", 2, middle, 0.15)
       sleep(2)
-      flapis.text.fadeOut("FlipOS is an operating system made in Lua", 2, middle, 0.15)
+      flapis.text.fadeOut("Flip is an operating system made in Lua", 2, middle, 0.15)
       flapis.text.fadeIn("It has been created to provide...", 2, middle, 0.15)
       sleep(2)
       flapis.text.fadeOut("It has been created to provide...", 2, middle, 0.15)
@@ -263,6 +265,7 @@ local function flip()
           pfg = colors.lightGray,
           username = uname,
           passedIntro = true,
+          listMaxItem = 3,
           customPath = {}
         }))
         configFile.flush()
@@ -276,13 +279,13 @@ local function flip()
 
     term.clear()
 
-    flapis.text.fadeIn("That's how you use most of FlipOS.", 2, middle, 0.15)
+    flapis.text.fadeIn("That's how you use most of Flip.", 2, middle, 0.15)
     sleep(2.5)
-    flapis.text.fadeOut("That's how you use most of FlipOS.", 2, middle, 0.15)
+    flapis.text.fadeOut("That's how you use most of Flip.", 2, middle, 0.15)
 
-    flapis.text.fadeIn("We hope you enjoy FlipOS!", 2, middle, 0.15)
+    flapis.text.fadeIn("We hope you enjoy Flip!", 2, middle, 0.15)
     sleep(2.5)
-    flapis.text.fadeOut("We hope you enjoy FlipOS!", 2, middle, 0.15)
+    flapis.text.fadeOut("We hope you enjoy Flip!", 2, middle, 0.15)
 
     local configFile = fs.open("core/settings.cfg", "w")
     configFile.write(textutils.serialise({
@@ -311,9 +314,9 @@ local function flip()
       term.clearLine()
     end
 
-    flapis.text.fadeIn("FlipOS", 2, middle, 0.15)
+    flapis.text.fadeIn("Flip", 2, middle, 0.15)
     sleep(2)
-    flapis.text.fadeOut("FlipOS", 2, middle, 0.15)
+    flapis.text.fadeOut("Flip", 2, middle, 0.15)
   end
   
   if fs.exists('autoexec.lua') then
@@ -324,13 +327,13 @@ local function flip()
   term.setTextColor(flconfig.userconfigs.fg)
   term.clear()
   term.setCursorPos(2, 2)
-  term.write("FlipOS")
+  term.write("Flip")
   term.setTextColor(flconfig.userconfigs.pfg)
   term.write(" by FiveMania ")
   term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
   term.write(flconfig.userconfigs.username)
   term.setCursorPos(2, h-1)
-  term.write("Version 1.2.5")
+  term.write("Version 1.3")
   term.setCursorBlink(false)
 
   for _, program in pairs(flconfig.userconfigs.customPath) do
@@ -515,9 +518,14 @@ local function flip()
           end
         elseif a == keys.enter then
           if flconfig.menuOptions[flconfig.menuPosition].luaCode then
-            load(flconfig.menuOptions[flconfig.menuPosition].script)()
+            load(flconfig.menuOptions[flconfig.menuPosition].script, '=lua', 't', _ENV)()
           else
-            shell.run(flconfig.menuOptions[flconfig.menuPosition].script)
+            multishell.launch({
+              ['shell'] = shell,
+              ['multishell'] = multishell
+            }, flconfig.menuOptions[flconfig.menuPosition].script)
+            multishell.setTitle(multishell.getCount(), flconfig.menuOptions[flconfig.menuPosition].text)
+            multishell.setFocus(multishell.getCount())            
           end
         end
       elseif e == "mouse_scroll" then
@@ -531,9 +539,14 @@ local function flip()
         end
       elseif e == "mouse_click" or e == "monitor_touch" then
         if flconfig.menuOptions[flconfig.menuPosition].luaCode then
-          load(flconfig.menuOptions[flconfig.menuPosition].script)()
+          load(flconfig.menuOptions[flconfig.menuPosition].script, '=lua', 't', _ENV)()
         else
-          shell.run(flconfig.menuOptions[flconfig.menuPosition].script)
+          multishell.launch({
+            ['shell'] = shell,
+            ['multishell'] = multishell
+          }, flconfig.menuOptions[flconfig.menuPosition].script)
+          multishell.setTitle(multishell.getCount(), flconfig.menuOptions[flconfig.menuPosition].text)
+          multishell.setFocus(multishell.getCount())          
         end
         term.setCursorBlink(false)
       elseif e == "term_resize" or e == "monitor_resize" then
@@ -550,30 +563,29 @@ local function flip()
       term.setTextColor(flconfig.userconfigs.fg)
       term.clear()
       term.setCursorPos(2, 2)
-      term.write("FlipOS")
+      term.write("Flip")
       term.setTextColor(flconfig.userconfigs.pfg)
       term.write(" by FiveMania ")
       term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
       term.write(flconfig.userconfigs.username)
       term.setCursorPos(2, h-1)
-      term.write("Version 1.2.5")
+      term.write("Version 1.3")
       term.setCursorBlink(false)
     -- Refresh Menu End
   end
 end
 
-local function bios()
+local function colorCheck()
   if not term.isColor() then
-    print("FlipOS does not work on Basic Computers, please upgrade to an Advanced Computer.")
+    print("Flip does not work on Basic Computers, please upgrade to an Advanced Computer.")
     print("Press any key to close")
     os.pullEvent("key")
-    os.queueEvent("terminate")
   else
-    flip()
+    flip()    
   end
 end
 
-local status, err = pcall(bios)
+local status, err = pcall(colorCheck)
 
 if status then
 else
@@ -583,7 +595,7 @@ else
     term.clear()
 
     term.setCursorPos(2, 2)
-    term.write("Oops! Looks like FlipOS crashed.")
+    term.write("Oops! Looks like Flip crashed.")
     term.setCursorPos(2, 3)
     term.write("This could be caused by an system error or an application.")
 
@@ -595,7 +607,7 @@ else
     term.setCursorPos(2, 8)
     term.write("If this error has been caused while executing an action")
     term.setCursorPos(2, 9)
-    term.write("on FlipOS, contact FiveMania.")
+    term.write("on Flip, contact FiveMania.")
 
     term.setCursorPos(2, 11)
     term.write("Lua Error Code: " .. err)
