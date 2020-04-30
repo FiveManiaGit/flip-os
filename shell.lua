@@ -662,6 +662,10 @@ else
         term.setTextColor(colors.red)
         if os.getComputerLabel() then
           write(os.getComputerLabel() .. "#" .. os.getComputerID())
+          term.setTextColor(colors.white)
+          write(" in ")
+          term.setTextColor(colors.cyan)
+          write("/" .. shell.dir())
         else
           write("user#" .. os.getComputerID())
           term.setTextColor(colors.white)
