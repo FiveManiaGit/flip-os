@@ -44,6 +44,7 @@ if key == keys.one then
     "/core/system/os.lua",
     "/core/system/bios.lua",
     "/startup.lua",
+    "/core",
   }
 
   for _, file in pairs(sysFiles) do
