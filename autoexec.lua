@@ -1,9 +1,9 @@
 local lines = {
   "Welcome to Flip 1.4!",
   "This version comes with new improvements and features but before getting started, we need to patch some things.",
-  ""
+  "",
   "[1] Patch settings",
-  "[2] Reset my settings"
+  "[2] Reset my settings",
 }
 
 for _, line in pairs(lines) do
@@ -14,6 +14,7 @@ local _, key = os.pullEvent("key")
 
 if key == keys.one then
   print("Insert a password for your user:")
+  sleep(0.05)
   local password = read("*")
 
   local passwordFile = fs.open("/core/password.cfg", "w")
