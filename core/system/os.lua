@@ -142,26 +142,28 @@ local function flip()
     local uname = read()
     flapis.text.fadeOut("What is your name? " .. uname, 2, middle, 0.15)
 
-    flapis.text.fadeIn("Insert a password. ", 2, middle, 0.15)
-    local password = read("*")
-    flapis.text.fadeOut("Insert a password. " .. string.rep("*", string.len(password)), 2, middle, 0.15)
+    if fs.exists("/core/password.cfg") then
+      flapis.text.fadeIn("Insert a password. ", 2, middle, 0.15)
+      local password = read("*")
+      flapis.text.fadeOut("Insert a password. " .. string.rep("*", string.len(password)), 2, middle, 0.15)
 
-    if password ~= nil and string.len(password) >= 1 then
-      local passwordFile = fs.open("/core/password.cfg", "w")
-      local passwordTable = {
-        hash = {},
-        enc = ""
-      }
+      if password ~= nil and string.len(password) >= 1 then
+        local passwordFile = fs.open("/core/password.cfg", "w")
+        local passwordTable = {
+          hash = {},
+          enc = ""
+        }
 
-      os.loadAPI("/core/apis/aeslua")
-      local iv = {}
-      for i = 1, 16 do iv[i] = math.random(1, 255) end
-      passwordTable.hash = iv
-      passwordTable.enc = aeslua.encrypt(table.concat(iv), password, aeslua.AES128, aeslua.CBCMODE, iv)
+        os.loadAPI("/core/apis/aeslua")
+        local iv = {}
+        for i = 1, 16 do iv[i] = math.random(1, 255) end
+        passwordTable.hash = iv
+        passwordTable.enc = aeslua.encrypt(table.concat(iv), password, aeslua.AES128, aeslua.CBCMODE, iv)
 
-      passwordFile.write(textutils.serialise(passwordTable))
-      passwordFile.flush()
-      passwordFile.close()
+        passwordFile.write(textutils.serialise(passwordTable))
+        passwordFile.flush()
+        passwordFile.close()
+      end
     end
 
     flapis.text.fadeIn("Hello, " .. uname .. "!", 2, middle, 0.15)
