@@ -1,3 +1,5 @@
+os.pullEvent = os.pullEventRaw
+
 -- Unload original CraftOS APIs
 os.unloadAPI("multishell")
 os.unloadAPI("shell")
