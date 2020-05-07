@@ -142,7 +142,7 @@ local function flip()
     local uname = read()
     flapis.text.fadeOut("What is your name? " .. uname, 2, middle, 0.15)
 
-    if fs.exists("/core/password.cfg") then
+    if not fs.exists("/core/password.cfg") then
       flapis.text.fadeIn("Insert a password. ", 2, middle, 0.15)
       local password = read("*")
       flapis.text.fadeOut("Insert a password. " .. string.rep("*", string.len(password)), 2, middle, 0.15)
@@ -331,7 +331,7 @@ local function flip()
     term.write("Flip")
     sleep(2)
 
-    if fs.exists("/core/password.cfg") or type(fs.open("/core/password.cfg", "r").readAll()) ~= "table" then
+    if fs.exists("/core/password.cfg") then
       os.loadAPI("/core/apis/aeslua")
       local passwordFile = fs.open("/core/password.cfg", "r").readAll()
       local passwordTable
@@ -375,7 +375,7 @@ local function flip()
   term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
   term.write(flconfig.userconfigs.username)
   term.setCursorPos(2, h-1)
-  term.write("Version 1.4")
+  term.write("Version 1.5")
   term.setCursorBlink(false)
 
   for _, program in pairs(flconfig.userconfigs.customPath) do
@@ -611,7 +611,7 @@ local function flip()
       term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
       term.write(flconfig.userconfigs.username)
       term.setCursorPos(2, h-1)
-      term.write("Version 1.4")
+      term.write("Version 1.5")
       term.setCursorBlink(false)
       multishell.setTitle(1, "Flip")
     -- Refresh Menu End
