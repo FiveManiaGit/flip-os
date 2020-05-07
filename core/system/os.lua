@@ -375,7 +375,7 @@ local function flip()
   term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
   term.write(flconfig.userconfigs.username)
   term.setCursorPos(2, h-1)
-  term.write("Version 1.5")
+  term.write("Version 1.4")
   term.setCursorBlink(false)
 
   for _, program in pairs(flconfig.userconfigs.customPath) do
@@ -611,7 +611,7 @@ local function flip()
       term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
       term.write(flconfig.userconfigs.username)
       term.setCursorPos(2, h-1)
-      term.write("Version 1.5")
+      term.write("Version 1.4")
       term.setCursorBlink(false)
       multishell.setTitle(1, "Flip")
     -- Refresh Menu End
