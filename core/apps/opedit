@@ -6,14 +6,23 @@ end)
 
 local tArgs = { ... }
 if #tArgs == 0 then
-  error( "Usage: edit <path>" )
+  error("Usage: edit <path>")
 end
 
 -- Error checking
 local sPath = shell.resolve(tArgs[1])
+
+string.startswith = function(self, str) 
+  return self:find('^' .. str) ~= nil
+end
+
+if sPath:startswith("core") then
+  error("Access denied!")
+end
+
 local bReadOnly = fs.isReadOnly(sPath)
 if fs.exists(sPath) and fs.isDir(sPath) then
-  error( "Cannot edit a directory." )
+  error("Cannot edit a directory.")
 end
 
 if multishell then

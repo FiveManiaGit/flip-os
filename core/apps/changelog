@@ -17,7 +17,7 @@ end
 
 term.setTextColor(colors.black)
 term.setCursorPos(2, 2)
-term.write("FlipOS Changelog")
+term.write("Flip Changelog")
 term.setCursorPos(2, 4)
 
 term.setBackgroundColor(colors.lightGray)
@@ -27,9 +27,9 @@ term.setBackgroundColor(setsCfg.bg)
 term.setTextColor(setsCfg.fg)
 
 term.setCursorPos(1, 6)
-local res = fs.open("core/changelog", "r").readAll()
+local res = fs.open("core/changelog", "r")
 if res ~= nil then
-  print(res)
+  print(res.readAll())
 else
   print("An error ocurred and we couldn't load the changelog. Sorry.")
 end

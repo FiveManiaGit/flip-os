@@ -1,0 +1,69 @@
+local w, h = term.getSize()
+local middle = math.floor(h/2)
+
+term.setBackgroundColor(colors.white)
+term.setTextColor(colors.black)
+term.clear()
+
+term.setCursorPos(2, middle-1)
+term.write("Uninstall Flip?")
+term.setCursorPos(2, middle)
+term.write("[1] Yes")
+term.setCursorPos(2, middle+1)
+term.write("[2] No")
+
+local _, key = os.pullEvent("key")
+
+if key == keys.one then
+  local sysFiles = {
+    "/core/apis/blittle",
+    "/core/apis/multishell.lua",
+    "/core/apis/shell.lua",
+    "/core/apis/aeslua",
+    "/core/apps/luaide",
+    "/core/apps/npaintpro",
+    "/core/apps/opedit",
+    "/core/apps/sketch",
+    "/core/apps/strafe",
+    "/core/apps/addapp",
+    "/core/apps/updater",
+    "/core/apps/changelog",
+    "/core/apps/enchat3",
+    "/core/apps/themes",
+    "/core/apps/kiosk",
+    "/core/apps/cloudcatcher",
+    "/core/apps/clock",
+    "/core/apps/uninstall",
+    "/core/apps/settings",
+    "/core/apps/stdgui",
+    "/core/apps/cloud.lua",
+    "/core/apps/skynet.lua",
+    "/core/apps/lua.lua",
+    "/core/changelog",
+    "/core/logo.nfp",
+    "/core/system/os.lua",
+    "/core/system/bios.lua",
+    "/startup.lua",
+  }
+
+  for _, file in pairs(sysFiles) do
+    fs.delete(file)
+    print("Deleted: " .. file)
+  end
+
+  term.clear()
+  term.setCursorPos(2, middle)
+  term.setBackgroundColor(colors.red)
+  term.setTextColor(colors.white)
+  term.clearLine()
+  term.write("Flip uninstalled successfully.")
+
+  term.setCursorPos(2, middle)
+  term.setBackgroundColor(colors.blue)
+  term.setTextColor(colors.white)
+  term.clearLine()
+  term.write("Press any key to reboot.")
+
+  os.pullEvent("key")
+  os.reboot()
+end

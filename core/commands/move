@@ -1,0 +1,32 @@
+local args = { ... }
+if #args < 2 then
+    print("Usage: mv <source> <destination>")
+    return
+end
+
+local source = shell.resolve(args[1])
+local destination = shell.resolve(args[2])
+local files = fs.find(source)
+
+string.startswith = function(self, str) 
+  return self:find('^' .. str) ~= nil
+end
+
+if #files > 0 then
+  for _, file in ipairs(files) do
+    if file:startswith("core") then
+      printError("Access denied!")
+    else
+      if fs.isDir(destination) then
+        fs.move(file, fs.combine(destination, fs.getName(file)))
+      elseif #files == 1 then
+        fs.move(file, destination)
+      else
+        printError("Can't overwrite multiple times.")
+        return
+      end
+    end
+  end
+else
+  printError("This file doesn't exists.")
+end

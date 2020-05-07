@@ -1,0 +1,29 @@
+local args = { ... }
+if #args < 2 then
+  print("Usages: rename <source> <destination>")
+  print("        rn <source> <destination>")
+  return
+end
+
+local source = shell.resolve(args[1])
+local destination = shell.resolve(args[2])
+
+string.startswith = function(self, str) 
+  return self:find('^' .. str) ~= nil
+end
+
+if not fs.exists(source) then
+  printError("This file doesn't exists.")
+  return
+elseif fs.exists(destination) then
+  printError("This destination already exists or the access is denied.")
+  return
+elseif fs.isReadOnly(destination) then
+  printError("This destination is read-only.")
+  return
+elseif source:startswith("core") or destination:startswith("core") then
+  printError("Access denied!")
+  return
+end
+
+fs.move(source, destination)

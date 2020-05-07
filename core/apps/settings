@@ -46,16 +46,18 @@ if key == keys.one then
   term.clear()
   term.setCursorPos(2, middle-3)
   term.write("Choose a setting")
-  term.setCursorPos(2, middle-1)
+  term.setCursorPos(2, middle-2)
   term.write("[1] Background Color")
-  term.setCursorPos(2, middle)
+  term.setCursorPos(2, middle-1)
   term.write("[2] Foreground Color")
-  term.setCursorPos(2, middle+1)
+  term.setCursorPos(2, middle)
   term.write("[3] 2nd Foreground Color")
-  term.setCursorPos(2, middle+2)
+  term.setCursorPos(2, middle+1)
   term.write("[4] Username")
-  term.setCursorPos(2, middle+3)
+  term.setCursorPos(2, middle+2)
   term.write("[5] Menu Item Limit")
+  term.setCursorPos(2, middle+3)
+  term.write("[6] Password")
 
   local _, cfgkey = os.pullEvent("key")
 
@@ -250,6 +252,46 @@ if key == keys.one then
       setsCfg.listMaxItem = 7
     end
 
+    configFileW.write(textutils.serialise(setsCfg))
+    configFileW.flush()
+
+    term.clear()
+    term.setCursorPos(2, middle-1)
+    term.write("Reboot to apply changes?")
+    term.setCursorPos(2, middle)
+    term.write("[1] Yes")
+    term.setCursorPos(2, middle+1)
+    term.write("[2] No")
+
+    local _, optkey = os.pullEvent("key")
+
+    if optkey == keys.one then
+      os.reboot()
+    end
+  elseif cfgkey == keys.six then
+    sleep(0.05)
+    term.clear()
+    term.setCursorPos(2, middle)
+    term.write("Insert a new password: ")
+
+    local password = read("*")
+
+    local passwordFile = fs.open("/core/password.cfg", "w")
+    local passwordTable = {
+      hash = {},
+      enc = ""
+    }
+
+    os.loadAPI("/core/apis/aeslua")
+    local iv = {}
+    for i = 1, 16 do iv[i] = math.random(1, 255) end
+    passwordTable.hash = iv
+    passwordTable.enc = aeslua.encrypt(table.concat(iv), password, aeslua.AES128, aeslua.CBCMODE, iv)
+
+    passwordFile.write(textutils.serialise(passwordTable))
+    passwordFile.flush()
+    passwordFile.close()
+    
     configFileW.write(textutils.serialise(setsCfg))
     configFileW.flush()
 

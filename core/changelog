@@ -1,20 +1,15 @@
-Flip 1.3 Changes:
-  * FlipOS is now called Flip
-    > A simple and light name
++ New Lua Shell
+  > You can now use our fancy new Lua interactive prompt on your quick tests.
 
-  + New Color Schemes added
-    > Fire
-    > Water
-    > Nature
-    > Rose
-    > Air
-    > Portal
++ Uninstaller
+  > If you don't like Flip or don't want to use it anymore, you can now uninstall it easily.
 
-  + New Shell
-    > You can now experience the new custom shell with a ZSH-like appearence.
-    > Coming soon: Shell Customizing
+* Bios Bootloader Logo
+  > Flip now have a Bios Logo, you can see it when booting your device.
 
-  + Multitasking
-    > You can now use multiple apps at once! Click the # icon to close an app.
++ Password Lock
+  > You can change the password on the settings app.
 
-This is a big update, that's why I took so long to launch it but there you go. Enjoy!
+* Shell Sandboxing
+  > Shell now protects the system folders and files.
+    You can modify system files using scripts if you really want.

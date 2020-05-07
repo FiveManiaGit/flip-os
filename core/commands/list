@@ -1,0 +1,35 @@
+local args = { ... }
+
+local shellDir = shell.dir()
+if args[1] ~= nil then
+  shellDir = shell.resolve(args[1])
+end
+
+if not fs.isDir(shellDir) then
+    printError("Not a directory")
+    return
+end
+
+local all = fs.list(shellDir)
+local files = {}
+local directories = {}
+
+local showHidden = settings.get("list.show_hidden")
+for _, item in pairs(all) do
+  if showHidden or string.sub(item, 1, 1) ~= "." then
+    local path = fs.combine(shellDir, item)
+    if fs.isDir(path) then
+      table.insert(directories, item)
+    else
+      table.insert(files, item)
+    end
+  end
+end
+table.sort(directories)
+table.sort(files)
+
+if term.isColour() then
+  textutils.pagedTabulate(colors.lime, directories, colors.white, files)
+else
+  textutils.pagedTabulate(directories, files)
+end
