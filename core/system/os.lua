@@ -64,7 +64,6 @@ local function flip()
       {text = "Update", script = "/core/apps/updater", useBlit = false, luaCode = false, colors = {colors.white, colors.lime}},
       {text = "Uninstall Flip", script = "/core/apps/uninstall", useBlit = false, luaCode = false, colors = {colors.red, colors.pink}},
       {text = "Changelog", script = "/core/apps/changelog", useBlit = false, luaCode = false, colors = {colors.black, colors.pink}},
-      {text = "Shell Mode", script = "os.queueEvent('terminate');", useBlit = false, luaCode = true, colors = {colors.black, colors.yellow}}
     },
     tourMenuOptions = {
       {text = "Option 1", colors = {colors.white, colors.red}},
