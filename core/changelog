@@ -1,15 +1,10 @@
-+ New Lua Shell
-  > You can now use our fancy new Lua interactive prompt on your quick tests.
+* Password Hashing
+  > Passwords are now hashed so you don't need to worry about security breaches on the password system.
 
-+ Uninstaller
-  > If you don't like Flip or don't want to use it anymore, you can now uninstall it easily.
+* Improved Tutorial
+  > The tutorial is now shorter but have a better interface and a little flashing text on the bottom.
 
-* Bios Bootloader Logo
-  > Flip now have a Bios Logo, you can see it when booting your device.
-
-+ Password Lock
-  > You can change the password on the settings app.
-
-* Shell Sandboxing
-  > Shell now protects the system folders and files.
-    You can modify system files using scripts if you really want.
+Note from FiveMania:
+This may be the last update of Flip but I'm not sure.
+This is why people can't just give the ideas and say about improvements without hurting me somehow.
+I hope you guys enjoy the new update and keep coding!
