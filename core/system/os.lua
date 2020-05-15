@@ -131,9 +131,10 @@ local function flip()
     term.setTextColor(flconfig.userconfigs.fg)
     term.clear()
 
-    flapis.text.fadeIn("Setting up...", 2, middle, 0.15)
+    flapis.text.fadeIn("Press the S key to skip the tutorial", 2, middle, 0.15)
     sleep(2)
-    flapis.text.fadeOut("Setting up...", 2, middle, 0.15)
+    flapis.text.fadeOut("Press the S key to skip the tutorial", 2, middle, 0.15)
+
     flapis.text.fadeIn("What is your computer name? ", 2, middle, 0.15)
     local pclabel = read()
     flapis.text.fadeOut("What is your computer name? " .. pclabel, 2, middle, 0.15)
@@ -142,79 +143,49 @@ local function flip()
     local uname = read()
     flapis.text.fadeOut("What is your name? " .. uname, 2, middle, 0.15)
 
-    if not fs.exists("/core/password.cfg") then
-      flapis.text.fadeIn("Insert a password. ", 2, middle, 0.15)
-      local password = read("*")
-      flapis.text.fadeOut("Insert a password. " .. string.rep("*", string.len(password)), 2, middle, 0.15)
+    flapis.text.fadeIn("Insert a password. ", 2, middle, 0.15)
+    local password = read("*")
+    flapis.text.fadeOut("Insert a password. " .. string.rep("*", string.len(password)), 2, middle, 0.15)
 
-      if password ~= nil and string.len(password) >= 1 then
-        local passwordFile = fs.open("/core/password.cfg", "w")
-        local passwordTable = {
-          hash = {},
-          enc = ""
-        }
+    if password ~= nil and string.len(password) >= 1 then
+      local passwordFile = fs.open("/core/password.cfg", "w")
+      local passwordTable = {
+        enc = ""
+      }
 
-        os.loadAPI("/core/apis/aeslua")
-        local iv = {}
-        for i = 1, 16 do iv[i] = math.random(1, 255) end
-        passwordTable.hash = iv
-        passwordTable.enc = aeslua.encrypt(table.concat(iv), password, aeslua.AES128, aeslua.CBCMODE, iv)
+      local sha256 = require("/core/apis/hash")
 
-        passwordFile.write(textutils.serialise(passwordTable))
-        passwordFile.flush()
-        passwordFile.close()
-      end
+      passwordTable.enc = sha256(password)
+
+      passwordFile.write(textutils.serialise(passwordTable))
+      passwordFile.flush()
+      passwordFile.close()
     end
 
-    flapis.text.fadeIn("Hello, " .. uname .. "!", 2, middle, 0.15)
-    sleep(2.5)
-    flapis.text.fadeOut("Hello, " .. uname .. "!", 2, middle, 0.15)
-    flapis.text.fadeIn("Before we get started, you can skip this", 2, middle-1, 0.15)
-    flapis.text.fadeIn("tutorial by pressing the Home key", 2, middle, 0.15)
-    flapis.text.fadeIn("at any moment of this tutorial.", 2, middle+1, 0.15)
-    sleep(3.5)
-    flapis.text.fadeOut("Before we get started, you can skip this", 2, middle-1, 0.15)
-    flapis.text.fadeOut("tutorial by pressing the Home key", 2, middle, 0.15)
-    flapis.text.fadeOut("at any moment of this tutorial.", 2, middle+1, 0.15)
+    if uname then
+      flapis.text.fadeIn("Hello, " .. uname .. "!", 2, middle, 0.15)
+      sleep(2.5)
+      flapis.text.fadeOut("Hello, " .. uname .. "!", 2, middle, 0.15)
+    else
+      flapis.text.fadeIn("Hello, user!", 2, middle, 0.15)
+      sleep(2.5)
+      flapis.text.fadeOut("Hello, user!", 2, middle, 0.15)
+    end
     
-    parallel.waitForAny(function()
+    parallel.waitForAny(function() 
+      while true do
+        flapis.text.fadeIn("This part is skippable.", 2, h-1, 0.075)
+        sleep(1)
+        flapis.text.fadeOut("This part is skippable.", 2, h-1, 0.075)
+        flapis.text.fadeIn("Press the S key to skip.", 2, h-1, 0.075)
+        sleep(1)
+        flapis.text.fadeOut("Press the S key to skip.", 2, h-1, 0.075)
+      end
+    end,
+    function()
       flapis.text.fadeIn("Welcome to Flip!", 2, middle, 0.15)
       sleep(2)
       flapis.text.fadeOut("Welcome to Flip!", 2, middle, 0.15)
-      flapis.text.fadeIn("Flip is an operating system made in Lua", 2, middle, 0.15)
-      sleep(2)
-      flapis.text.fadeOut("Flip is an operating system made in Lua", 2, middle, 0.15)
-      flapis.text.fadeIn("It has been created to provide...", 2, middle, 0.15)
-      sleep(2)
-      flapis.text.fadeOut("It has been created to provide...", 2, middle, 0.15)
-
-      flapis.text.fadeIn("Simple use", 2, middle, 0.15)
-      sleep(1)
-      flapis.text.fadeOut("Simple use", 2, middle, 0.15)
-
-      flapis.text.fadeIn("Minimalist interface", 2, middle, 0.15)
-      sleep(1)
-      flapis.text.fadeOut("Minimalist interface", 2, middle, 0.15)
-
-      flapis.text.fadeIn("Amazing applications", 2, middle, 0.15)
-      sleep(1)
-      flapis.text.fadeOut("Amazing applications", 2, middle, 0.15)
-
-      flapis.text.fadeIn("Good experiences", 2, middle, 0.15)
-      sleep(1)
-      flapis.text.fadeOut("Good experiences", 2, middle, 0.15)
-
-      flapis.text.fadeIn("Education", 2, middle, 0.15)
-      sleep(1)
-      flapis.text.fadeOut("Education", 2, middle, 0.15)
-
-      flapis.text.fadeIn("Work (specially for home office)", 2, middle, 0.15)
-      sleep(1)
-      flapis.text.fadeOut("Work (specially for home office)", 2, middle, 0.15)
-
-      flapis.text.fadeIn("And fun.", 2, middle, 0.15)
-      sleep(1)
-      flapis.text.fadeOut("And fun.", 2, middle, 0.15)
 
       flapis.text.fadeIn("Let's take a quick tour.", 2, middle, 0.15)
       sleep(2.5)
@@ -269,30 +240,32 @@ local function flip()
       flapis.text.fadeOut("Press your arrow keys (\24 and \25) to move around", 2, middle-3, 0.15)
       flapis.text.fadeOut("Press ENTER to proceed", 2, middle+3, 0.15)
     end, function()
-      local _, skipkey = os.pullEvent("key")
+      while true do
+        local _, skipkey = os.pullEvent("key")
 
-      if skipkey == keys.home then
-        term.clear()
-        flapis.text.fadeIn("Tutorial skipped!", 2, middle, 0.05)
-        sleep(1)
-        flapis.text.fadeOut("Tutorial skipped!", 2, middle, 0.05)
+        if skipkey == keys.s then
+          term.clear()
+          flapis.text.fadeIn("Tutorial skipped!", 2, middle, 0.05)
+          sleep(1)
+          flapis.text.fadeOut("Tutorial skipped!", 2, middle, 0.05)
 
-        local configFile = fs.open("/core/settings.cfg", "w")
-        configFile.write(textutils.serialise({
-          bg = colors.white,
-          fg = colors.black,
-          pfg = colors.lightGray,
-          username = uname,
-          passedIntro = true,
-          listMaxItem = 3,
-          customPath = {}
-        }))
-        configFile.flush()
-        configFile.close()
+          local configFile = fs.open("/core/settings.cfg", "w")
+          configFile.write(textutils.serialise({
+            bg = colors.white,
+            fg = colors.black,
+            pfg = colors.lightGray,
+            username = uname,
+            passedIntro = true,
+            listMaxItem = 3,
+            customPath = {}
+          }))
+          configFile.flush()
+          configFile.close()
 
-        os.setComputerLabel(pclabel)
+          os.setComputerLabel(pclabel)
 
-        os.reboot()
+          os.reboot()
+        end
       end
     end)
 
@@ -332,35 +305,35 @@ local function flip()
     sleep(2)
 
     if fs.exists("/core/password.cfg") then
-      os.loadAPI("/core/apis/aeslua")
-      local passwordFile = fs.open("/core/password.cfg", "r").readAll()
-      local passwordTable
+      while true do
+        local passwordFile = fs.open("/core/password.cfg", "r").readAll()
+        local passwordTable
+        local sha256 = require("/core/apis/hash")
 
-      passwordTable = textutils.unserialise(passwordFile)
+        passwordTable = textutils.unserialise(passwordFile)
 
-      local denc = aeslua.decrypt(table.concat(passwordTable.hash), passwordTable.enc, aeslua.AES128, aeslua.CBCMODE, passwordTable.hash)
-
-      term.setCursorPos(2, middle)
-      term.clearLine()
-      if flconfig.userconfigs.username ~= nil or flconfig.userconfigs.username ~= "" then
-        term.write(flconfig.userconfigs.username .. "'s password: ")
-      else
-        term.write("User password: ")
-      end
-
-      local passw = read("*")
-
-      if passw == denc then
         term.setCursorPos(2, middle)
         term.clearLine()
-        term.write("Access granted!")
-        sleep(1)
-      else
-        term.setCursorPos(2, middle)
-        term.clearLine()
-        term.write("Access denied!")
-        sleep(1)
-        os.reboot()
+        if flconfig.userconfigs.username ~= nil or flconfig.userconfigs.username ~= "" then
+          term.write(flconfig.userconfigs.username .. "'s password: ")
+        else
+          term.write("User password: ")
+        end
+
+        local passw = sha256(read("*"))
+
+        if passw == passwordTable.enc then
+          term.setCursorPos(2, middle)
+          term.clearLine()
+          term.write("Welcome.")
+          sleep(1)
+          break
+        else
+          term.setCursorPos(2, middle)
+          term.clearLine()
+          term.write("Wrong password, try again.")
+          sleep(1)
+        end
       end
     end
   end
@@ -375,7 +348,7 @@ local function flip()
   term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
   term.write(flconfig.userconfigs.username)
   term.setCursorPos(2, h-1)
-  term.write("Version 1.4")
+  term.write("Version 1.5")
   term.setCursorBlink(false)
 
   for _, program in pairs(flconfig.userconfigs.customPath) do
@@ -611,7 +584,7 @@ local function flip()
       term.setCursorPos((w-string.len(flconfig.userconfigs.username)), 2)
       term.write(flconfig.userconfigs.username)
       term.setCursorPos(2, h-1)
-      term.write("Version 1.4")
+      term.write("Version 1.5")
       term.setCursorBlink(false)
       multishell.setTitle(1, "Flip")
     -- Refresh Menu End

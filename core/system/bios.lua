@@ -3,7 +3,6 @@ os.unloadAPI("multishell")
 os.unloadAPI("shell")
 
 -- Load custom Flip APIs
-os.loadAPI("/core/apis/aeslua")
 os.loadAPI("/core/apis/shell.lua")
 os.loadAPI("/core/apis/multishell.lua")
 
@@ -16,7 +15,7 @@ local sysFiles = {
   "/core/apis/blittle",
   "/core/apis/multishell.lua",
   "/core/apis/shell.lua",
-  "/core/apis/aeslua",
+  "/core/apis/hash",
   "/core/apps/luaide",
   "/core/apps/npaintpro",
   "/core/apps/opedit",
@@ -40,6 +39,10 @@ local sysFiles = {
   "/core/logo.nfp",
   "/core/system/os.lua",
   "/core/system/bios.lua",
+  "/core/commands/delete",
+  "/core/commands/list",
+  "/core/commands/move",
+  "/core/commands/rename",
   "/startup.lua",
 }
 
@@ -49,11 +52,15 @@ local criticalFiles = {
   "/startup.lua",
   "/core/apis/multishell.lua",
   "/core/apis/shell.lua",
+  "/core/commands/delete",
+  "/core/commands/list",
+  "/core/commands/move",
+  "/core/commands/rename",
 }
 
 local optionalFiles = {
   "/core/apis/blittle",
-  "/core/apis/aeslua",
+  "/core/apis/hash",
   "/core/apps/luaide",
   "/core/apps/npaintpro",
   "/core/apps/opedit",

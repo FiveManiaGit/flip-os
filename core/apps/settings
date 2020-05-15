@@ -270,6 +270,33 @@ if key == keys.one then
     end
   elseif cfgkey == keys.six then
     sleep(0.05)
+    local sha256 = require("/core/apis/hash")
+    while true do
+      local passwordFile = fs.open("/core/password.cfg", "r").readAll()
+      local passwordTable      
+
+      passwordTable = textutils.unserialise(passwordFile)
+
+      term.setCursorPos(2, middle)
+      term.clearLine()
+      if flconfig.userconfigs.username ~= nil or flconfig.userconfigs.username ~= "" then
+        term.write("Old" .. flconfig.userconfigs.username .. "'s password: ")
+      else
+        term.write("Old user password: ")
+      end
+
+      local passw = sha256(read("*"))
+
+      if passw == passwordTable.enc then
+        break
+      else
+        term.setCursorPos(2, middle)
+        term.clearLine()
+        term.write("Wrong password, try again.")
+        sleep(1)
+      end
+    end
+
     term.clear()
     term.setCursorPos(2, middle)
     term.write("Insert a new password: ")
@@ -278,15 +305,9 @@ if key == keys.one then
 
     local passwordFile = fs.open("/core/password.cfg", "w")
     local passwordTable = {
-      hash = {},
       enc = ""
     }
-
-    os.loadAPI("/core/apis/aeslua")
-    local iv = {}
-    for i = 1, 16 do iv[i] = math.random(1, 255) end
-    passwordTable.hash = iv
-    passwordTable.enc = aeslua.encrypt(table.concat(iv), password, aeslua.AES128, aeslua.CBCMODE, iv)
+    passwordTable.enc = sha256(password)
 
     passwordFile.write(textutils.serialise(passwordTable))
     passwordFile.flush()
