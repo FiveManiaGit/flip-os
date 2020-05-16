@@ -31,7 +31,7 @@ while runState do
   if not os.getComputerLabel() then
     term.write("user#" .. os.getComputerID())
   else
-    term.write(os.getComputerLabel .. "#" .. os.getComputerID())
+    term.write(os.getComputerLabel() .. "#" .. os.getComputerID())
   end
   term.setTextColor(colors.lightBlue)
   print('')
